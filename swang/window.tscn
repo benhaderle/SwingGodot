@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://dt5ybd55u58is"]
+
+[ext_resource type="PackedScene" uid="uid://dbjey42dsgpve" path="res://level_border.tscn" id="1_i35ec"]
+[ext_resource type="Script" path="res://Player.gd" id="2_wgob2"]
+[ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://icon.svg" id="3_cpuej"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nu8wk"]
+
+[node name="Window" type="Window"]
+size = Vector2i(5000, 2160)
+
+[node name="Polygon2D" parent="." instance=ExtResource("1_i35ec")]
+polygon = PackedVector2Array(-2092, 1524, 2118, 1534, 1896, 1337, -1867, 1274, -1826, -764, 1865, -695, 1898, 1337, 2118, 1534, 2165, -878, -1988, -916)
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+slide_on_ceiling = false
+script = ExtResource("2_wgob2")
+gravity = 2.0
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+position = Vector2(148, -81)
+scale = Vector2(0.15625, 0.15625)
+texture = ExtResource("3_cpuej")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(148, -81)
+shape = SubResource("RectangleShape2D_nu8wk")
