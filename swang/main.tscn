@@ -76,7 +76,6 @@ grappleGravity = 8.0
 
 [node name="GrappleLine" type="Line2D" parent="Node"]
 points = PackedVector2Array(0, 0, 0, 0)
-width = 2.0
 default_color = Color(0.788235, 0.54902, 0.976471, 1)
 script = ExtResource("7_r1qhw")
 

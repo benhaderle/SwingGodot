@@ -24,7 +24,6 @@ func _on_ready():
 
 func _physics_process(delta):
 	if grappled:
-		
 		var grappleToPlayer : Vector2 = (grapple.position - playerBody.position)
 		
 		if grappleToPlayer.length() >= lineLength:
@@ -49,14 +48,13 @@ func _physics_process(delta):
 				debugLine.points[1] = playerBody.position + ccw * 100
 				desiredVelocity = grappledVel * ccw
 #			
-			playerBody.velocity = lerp(playerBody.velocity, desiredVelocity, 1 * delta)
-			
+			playerBody.velocity = lerp(playerBody.velocity, desiredVelocity, delta)
 			
 			playerBody.velocity += distToLineLength * k * distToLineLength * normalizedGrappleToPlayer * delta
-			playerBody.velocity += Vector2(0,grappleGravity) * delta
 		else:
 			freeFlying = true
-			playerBody.velocity += Vector2(0,grappleGravity) * delta
+			
+		playerBody.velocity += Vector2(0,grappleGravity) * delta
 			
 		if playerBody.velocity.length() > maxVel:
 			maxVel = playerBody.velocity.length()
@@ -65,8 +63,7 @@ func _physics_process(delta):
 			playerBody.velocity = Vector2(0,0)
 		else:
 			playerBody.velocity += Vector2(0,gravity) * delta
-	
-	print(maxVel)
+
 	playerBody.move_and_collide(playerBody.velocity)
 
 func _process(delta):
