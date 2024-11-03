@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dbjey42dsgpve"]
 
-[ext_resource type="Script" path="res://PolygonBody2D.gd" id="1_kufgp"]
+[ext_resource type="Script" path="res://Scripts/PolygonBody2D.gd" id="1_kufgp"]
 
 [node name="Polygon2D" type="Polygon2D"]
 position = Vector2(100, 200)

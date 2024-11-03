@@ -1,17 +1,17 @@
 [gd_scene load_steps=13 format=3 uid="uid://nm0w0yqxo1k3"]
 
-[ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://icon.svg" id="1_3qtfs"]
-[ext_resource type="Shader" path="res://background.gdshader" id="1_ssnst"]
-[ext_resource type="Script" path="res://Player.gd" id="2_6qgxp"]
-[ext_resource type="Texture2D" uid="uid://dhrmuxmi5xh3m" path="res://reticle.png" id="3_0yt7s"]
-[ext_resource type="Script" path="res://Grapple.gd" id="3_2whii"]
-[ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://circle.png" id="3_5u7pa"]
-[ext_resource type="Script" path="res://PlayerController.gd" id="3_ju4yq"]
-[ext_resource type="Script" path="res://Reticle.gd" id="4_3jk0o"]
-[ext_resource type="Script" path="res://GrappleLine.gd" id="7_r1qhw"]
+[ext_resource type="Shader" path="res://Shaders/background.gdshader" id="1_2umnk"]
+[ext_resource type="Texture2D" uid="uid://dhrmuxmi5xh3m" path="res://Art/reticle.png" id="2_mwa8p"]
+[ext_resource type="Script" path="res://Scripts/Reticle.gd" id="3_i7yok"]
+[ext_resource type="Script" path="res://Scripts/PlayerController.gd" id="4_5x65x"]
+[ext_resource type="Script" path="res://Scripts/GrappleLine.gd" id="5_hbimf"]
+[ext_resource type="Script" path="res://Scripts/Grapple.gd" id="6_psv33"]
+[ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="7_mrs78"]
+[ext_resource type="Script" path="res://Scripts/Player.gd" id="8_lldbs"]
+[ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://Art/icon.svg" id="9_ifetg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b32nj"]
-shader = ExtResource("1_ssnst")
+shader = ExtResource("1_2umnk")
 shader_parameter/color1 = Color(0.294118, 0.654902, 0.890196, 1)
 shader_parameter/color2 = Color(0.258824, 0.231373, 0.341176, 1)
 shader_parameter/color3 = Color(0.0666667, 0.529412, 0.670588, 1)
@@ -61,8 +61,8 @@ polygon = PackedVector2Array(-181, -123, -134.875, -188.037, -101.031, -120.63, 
 [node name="Reticle" type="Sprite2D" parent="."]
 position = Vector2(230, 2.1684e-19)
 scale = Vector2(0.1, 0.1)
-texture = ExtResource("3_0yt7s")
-script = ExtResource("4_3jk0o")
+texture = ExtResource("2_mwa8p")
+script = ExtResource("3_i7yok")
 highlightedColor = Color(0.839216, 0.376471, 0.831373, 1)
 normalColor = Color(0.2, 0.654902, 0.423529, 1)
 highlightedScale = 0.15
@@ -70,14 +70,14 @@ normalScale = 0.1
 pressedDownScale = 0.08
 
 [node name="Node" type="Node" parent="."]
-script = ExtResource("3_ju4yq")
+script = ExtResource("4_5x65x")
 gravity = 10.0
 grappleGravity = 8.0
 
 [node name="GrappleLine" type="Line2D" parent="Node"]
 points = PackedVector2Array(0, 0, 0, 0)
 default_color = Color(0.788235, 0.54902, 0.976471, 1)
-script = ExtResource("7_r1qhw")
+script = ExtResource("5_hbimf")
 
 [node name="TrailLine" type="Line2D" parent="Node"]
 position = Vector2(2.08165e-12, 2.08165e-12)
@@ -93,12 +93,12 @@ position = Vector2(269, -140)
 scale = Vector2(0.02, 0.02)
 collision_layer = 4
 collision_mask = 3
-script = ExtResource("3_2whii")
+script = ExtResource("6_psv33")
 
 [node name="Sprite2D" type="Sprite2D" parent="Node/Grapple"]
 modulate = Color(0.811765, 0.415686, 1, 1)
 position = Vector2(2.08165e-12, 2.08165e-12)
-texture = ExtResource("3_5u7pa")
+texture = ExtResource("7_mrs78")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node/Grapple"]
 shape = SubResource("CircleShape2D_fhpe3")
@@ -108,12 +108,12 @@ position = Vector2(269, -140)
 scale = Vector2(2, 2)
 collision_layer = 2
 slide_on_ceiling = false
-script = ExtResource("2_6qgxp")
+script = ExtResource("8_lldbs")
 
 [node name="Sprite2D" type="Sprite2D" parent="Node/PlayerBody"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 scale = Vector2(0.15625, 0.15625)
-texture = ExtResource("1_3qtfs")
+texture = ExtResource("9_ifetg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node/PlayerBody"]
 position = Vector2(2.08165e-12, 2.08165e-12)

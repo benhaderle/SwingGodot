@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://dt5ybd55u58is"]
 
-[ext_resource type="PackedScene" uid="uid://dbjey42dsgpve" path="res://level_border.tscn" id="1_i35ec"]
+[ext_resource type="PackedScene" uid="uid://dbjey42dsgpve" path="res://Scenes/level_border.tscn" id="1_i35ec"]
 [ext_resource type="Script" path="res://Player.gd" id="2_wgob2"]
-[ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://icon.svg" id="3_cpuej"]
+[ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://Art/icon.svg" id="3_cpuej"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nu8wk"]
 
