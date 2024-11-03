@@ -1,23 +1,26 @@
 extends Node
 
 @onready var playerBody = $PlayerBody
-@export var gravity : float 
-@export var grappleGravity : float 
-
 @onready var trail : Line2D = $TrailLine
 @onready var debugLine : Line2D = $DebugLine
-
-var grappled : bool
-
 @onready var grapple = $Grapple
-var grappleFlying : bool
-
 @onready var grappleLine = $GrappleLine
-var lineLength : float
 
+# gravity while free flying
+@export var gravity : float
+# gravity while grappled 
+@export var grappleGravity : float 
+# whether or not we are currently grappled
+var grappled : bool
+# whether or not the grapple is currently flying towards a target
+var grappleFlying : bool
+# how long the grapple line length is
+var lineLength : float
+# whether or not we are currently free flying.
+# note that you can be grappled and free falling when the player's distance to a grapple point is less than the line length
 var freeFlying : bool
+# the magnitude of the current velocity when grappled
 var grappledVel : float
-var maxVel : float
 
 func _on_ready():
 	Utils.disableNode(grapple)
@@ -55,9 +58,6 @@ func _physics_process(delta):
 			freeFlying = true
 			
 		playerBody.velocity += Vector2(0,grappleGravity) * delta
-			
-		if playerBody.velocity.length() > maxVel:
-			maxVel = playerBody.velocity.length()
 	else:
 		if playerBody.is_on_floor():
 			playerBody.velocity = Vector2(0,0)
@@ -120,7 +120,6 @@ func move_grapple(startPosition : Vector2, target : Variant):
 				freeFlying = false
 				lineLength = (playerBody.position - grapple.position).length()
 				grappledVel = playerBody.velocity.length()
-				maxVel = 0
 			
 		await get_tree().physics_frame
 		
