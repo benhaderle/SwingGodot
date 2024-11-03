@@ -60,6 +60,11 @@ position = Vector2(230, 2.1684e-19)
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_mwa8p")
 script = ExtResource("3_7rstr")
+highlightedColor = Color(0.878431, 0.494118, 0.858824, 1)
+normalColor = Color(0.207843, 0.670588, 0.501961, 1)
+highlightedScale = 0.15
+normalScale = 0.1
+pressedDownScale = 0.08
 
 [node name="PlayerController" type="Node" parent="."]
 script = ExtResource("4_5x65x")
