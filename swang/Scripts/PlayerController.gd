@@ -126,4 +126,3 @@ func move_grapple(startPosition : Vector2, target : Variant):
 		grapple.get_node("CollisionShape2D").disabled = false
 	
 	print("done flying")
-
