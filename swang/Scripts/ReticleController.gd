@@ -23,7 +23,9 @@ func _process(delta):
 	if overGrappleArea:
 		rotation = rotation + 1 * delta
 	
-	if Input.is_action_just_pressed("Grapple"):
+	if Input.is_action_just_pressed("Restart"):
+		get_tree().reload_current_scene()
+	elif Input.is_action_just_pressed("Grapple"):
 		scale = Vector2(pressedDownScale, pressedDownScale)
 		if overGrappleArea:
 			emit_signal("clicked_on_grapple_area", global_position)

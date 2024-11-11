@@ -163,6 +163,7 @@ func move_grapple(startPosition : Vector2, target : Variant):
 				freeFlying = false
 				lineLength = (playerBody.position - grapple.position).length()
 				grappledVel = playerBody.velocity.length()
+				playerBody.look_at(target)
 				
 		# wait for another frame before continuing to fly
 		await get_tree().physics_frame
