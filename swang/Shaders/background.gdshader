@@ -22,34 +22,34 @@ vec4 voronoi( in vec2 x, float w )
     {
         vec2 g = vec2( float(i),float(j) );
         vec2 o = hash2( n + g );
-		
+
 		// animate
         o = 0.5 + 0.5*sin( TIME*timeScale + 6.2831*o );
 
-        // distance to cell		
+        // distance to cell
 		float d = length(g - f + o);
-		
+
         // cell color
 		vec3 col = 0.0 + 0.5 * (hash1(dot(n + g, vec2(0.0,113))) * 0.5 + color1.rgb);
 //		col = min(col, color1.rgb);
 //		col = max(col, color2.rgb);
-		
+
         // in linear space
         col = col*col;
-        
-        // do the smooth min for colors and distances		
+
+        // do the smooth min for colors and distances
 		float h = smoothstep( -1.0, 1.0, (m.x-d)/w );
 	    m.x   = mix( m.x,     d, h ) - h*(1.0-h)*w/(1.0+3.0*w); // distance
 		m.yzw = mix( m.yzw, col, h ) - h*(1.0-h)*w/(1.0+3.0*w); // color
     }
-	
+
 	return m;
 }
 
 void fragment() {
     vec2  p = FRAGCOORD.xy/resolution.xy;
     float c = 0.5*resolution.x/resolution.y;
-	
+
     vec4 v = voronoi( 6.0*p, 0.001 );
 
     // gamma

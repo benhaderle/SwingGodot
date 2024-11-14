@@ -6,6 +6,7 @@ extends Node
 @onready var grapple = $Grapple
 @onready var grappleLine = $GrappleLine
 
+@export var bounceFactor : float = .5
 ## gravity while free flying
 @export var gravity : float
 ## gravity while grappled 
@@ -78,12 +79,16 @@ func _physics_process(delta):
 	else:
 		# I think this is busted rn but the idea is that if you're on the ground there's no gravity and your velocity is 0
 		if playerBody.is_on_floor():
-			playerBody.velocity = Vector2(0,0)
+			playerBody.velocity = Vector2(0, 0)
 		else:
-			
 			playerBody.velocity += Vector2(0, gravity) * delta
 
-	playerBody.move_and_collide(playerBody.velocity)
+	var collision = playerBody.move_and_collide(playerBody.velocity)
+	
+	# handle the bounce off walls
+	if collision:
+		# TODO: make the bounceFactor dependent on the surface we're bouncing on
+		playerBody.velocity = playerBody.velocity.bounce(collision.get_normal()) * bounceFactor
 
 func _process(delta):
 	# while the grapple is still active on the screen
@@ -169,5 +174,3 @@ func move_grapple(startPosition : Vector2, target : Variant):
 		
 		# enable the collision shape after one frame of movement 
 		grapple.get_node("CollisionShape2D").disabled = false
-	
-	print("grapple is done flying")
