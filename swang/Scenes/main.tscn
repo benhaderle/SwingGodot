@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://nm0w0yqxo1k3"]
+[gd_scene load_steps=11 format=3 uid="uid://nm0w0yqxo1k3"]
 
 [ext_resource type="Shader" path="res://Shaders/background.gdshader" id="1_2umnk"]
 [ext_resource type="Texture2D" uid="uid://dhrmuxmi5xh3m" path="res://Art/reticle.png" id="2_mwa8p"]
@@ -20,6 +20,9 @@ shader_parameter/resolution = Vector2(300, 200)
 radius = 256.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nu8wk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v0lyo"]
+size = Vector2(10, 10)
 
 [node name="Node2D" type="Node2D"]
 
@@ -69,7 +72,7 @@ pressedDownScale = 0.08
 [node name="PlayerController" type="Node" parent="."]
 script = ExtResource("4_5x65x")
 gravity = 10.0
-grappleGravity = 8.0
+grappleGravity = 10.0
 
 [node name="GrappleLine" type="Line2D" parent="PlayerController"]
 points = PackedVector2Array(0, 0, 0, 0)
@@ -80,6 +83,7 @@ position = Vector2(2.08165e-12, 2.08165e-12)
 width = 2.0
 
 [node name="DebugLine" type="Line2D" parent="PlayerController"]
+visible = false
 position = Vector2(2.08165e-12, 2.08165e-12)
 points = PackedVector2Array(0, 0, 0, 0)
 width = 2.0
@@ -112,6 +116,10 @@ texture = ExtResource("9_ifetg")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerController/PlayerBody"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_nu8wk")
+
+[node name="GroundCast" type="ShapeCast2D" parent="PlayerController/PlayerBody"]
+shape = SubResource("RectangleShape2D_v0lyo")
+target_position = Vector2(0, 8)
 
 [connection signal="mouse_entered" from="Level0/Border/StaticBody2D" to="ReticleController" method="_on_mouse_entered_grapple_area"]
 [connection signal="mouse_exited" from="Level0/Border/StaticBody2D" to="ReticleController" method="_on_mouse_exited_grapple_area"]

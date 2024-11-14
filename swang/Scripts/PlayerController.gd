@@ -5,8 +5,8 @@ extends Node
 @onready var debugLine : Line2D = $DebugLine
 @onready var grapple = $Grapple
 @onready var grappleLine = $GrappleLine
+@onready var groundCast = $PlayerBody/GroundCast
 
-@export var bounceFactor : float = .5
 ## gravity while free flying
 @export var gravity : float
 ## gravity while grappled 
@@ -19,10 +19,17 @@ extends Node
 @export var minLineLength : float = 200
 ## how fast the grapple extends or retracts from a grapple point
 @export var grappleFlyingSpeed : float = 5000
+## the bounciness of the player when hitting a wall
+@export var bounceFactor : float = .5
+## the threshold of velocity squared at which the player will stop moving if grounded
+@export var stopVelocityThreshold : float = 10
+## the maximum angle counted as a floor in radians 
+@export var maxFloorAngle : float = .8
 ## whether or not we are currently grappled
 var grappled : bool
 ## whether or not the grapple is currently flying towards a target
 var grappleFlying : bool
+var grounded : bool 
 ## how long the grapple line length is
 var lineLength : float
 ## whether or not we are currently free flying.
@@ -37,6 +44,9 @@ func _on_ready():
 func _physics_process(delta):
 	debugLine.points[0] = playerBody.position
 	if grappled:
+		# add the grapple gravity
+		playerBody.velocity += Vector2(0, grappleGravity) * delta
+		
 		var grappleToPlayer : Vector2 = (grapple.position - playerBody.position)
 		var normalizedGrappleToPlayer = grappleToPlayer.normalized()
 		
@@ -56,10 +66,8 @@ func _physics_process(delta):
 			var desiredVelocity
 			# figure out which direction around the grapple point we're traveling in and then use the grappledVel to set the magnitude
 			if(cw.dot(playerBody.velocity) > ccw.dot(playerBody.velocity)):
-				debugLine.points[1] = playerBody.position + cw * 100
 				desiredVelocity = grappledVel * cw
 			else:
-				debugLine.points[1] = playerBody.position + ccw * 100
 				desiredVelocity = grappledVel * ccw
 #			
 			# ease the current velocity towards the current velocity
@@ -73,22 +81,33 @@ func _physics_process(delta):
 		else:
 			freeFlying = true
 		
-		# add the grapple gravity
-		playerBody.velocity += Vector2(0, grappleGravity) * delta
 	# if we're not grappled
 	else:
-		# I think this is busted rn but the idea is that if you're on the ground there's no gravity and your velocity is 0
-		if playerBody.is_on_floor():
-			playerBody.velocity = Vector2(0, 0)
+		if grounded:
+			#TODO this is where we add the ground movement control
+			playerBody.velocity
 		else:
 			playerBody.velocity += Vector2(0, gravity) * delta
-
-	var collision = playerBody.move_and_collide(playerBody.velocity)
 	
+	print(playerBody.velocity)
+	
+	var collision = playerBody.move_and_collide(playerBody.velocity)
 	# handle the bounce off walls
 	if collision:
 		# TODO: make the bounceFactor dependent on the surface we're bouncing on
 		playerBody.velocity = playerBody.velocity.bounce(collision.get_normal()) * bounceFactor
+		
+		# if our velocity is less than the stop threshold and we're on a floor, stop the player
+		if playerBody.velocity.length_squared() < stopVelocityThreshold and collision.get_angle() < maxFloorAngle:
+			playerBody.velocity = Vector2(0, 0)
+			grounded = true
+		else:
+			grounded = false
+	# if there was no collision, but we're currently grounded, check to make sure we're still grounded
+	elif grounded:
+		groundCast.force_shapecast_update()
+		if !groundCast.collision_result:
+			grounded = false
 
 func _process(delta):
 	# while the grapple is still active on the screen
