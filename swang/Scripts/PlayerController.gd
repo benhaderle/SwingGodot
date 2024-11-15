@@ -7,6 +7,8 @@ extends Node
 @onready var grappleLine = $GrappleLine
 @onready var groundCast = $PlayerBody/GroundCast
 
+@export var groundMovementLateralMovementSpeed : float = 10
+@export var groundMovementUpwardsMovementSpeed : float = 10
 ## gravity while free flying
 @export var gravity : float
 ## gravity while grappled 
@@ -70,16 +72,18 @@ func _physics_process(delta):
 			playerBody.velocity += distToLineLength * distToLineLength * springConstant * normalizedGrappleToPlayer * delta
 	# if we're not grappled
 	else:
+		# if we're grounded, we can do ground movement
 		if grounded:
-			#TODO this is where we add the ground movement control
-			playerBody.velocity
+			# if we're only pressing one of the lateral buttons, initiate a lateral jump
+			if Input.is_action_pressed("Right") and not Input.is_action_pressed("Left"):
+				playerBody.velocity = Vector2(groundMovementLateralMovementSpeed, groundMovementUpwardsMovementSpeed)
+			elif Input.is_action_pressed("Left") and not Input.is_action_pressed("Right"):
+				playerBody.velocity = Vector2(-groundMovementLateralMovementSpeed, groundMovementUpwardsMovementSpeed)
 		else:
 			playerBody.velocity += Vector2(0, gravity) * delta
 	
-	print(playerBody.velocity)
-	
 	var collision = playerBody.move_and_collide(playerBody.velocity)
-	# handle the bounce off walls
+	# handle the bounce off walls and grounded-ness
 	if collision:
 		# TODO: make the bounceFactor dependent on the surface we're bouncing on
 		playerBody.velocity = playerBody.velocity.bounce(collision.get_normal()) * bounceFactor
