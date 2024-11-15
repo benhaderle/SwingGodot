@@ -29,6 +29,7 @@ extends Node
 var grappled : bool
 ## whether or not the grapple is currently flying towards a target
 var grappleFlying : bool
+## whether or not we are stopped on the ground rn
 var grounded : bool 
 ## how long the grapple line length is
 var lineLength : float
