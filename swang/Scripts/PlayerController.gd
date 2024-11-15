@@ -7,8 +7,12 @@ extends Node
 @onready var grappleLine = $GrappleLine
 @onready var groundCast = $PlayerBody/GroundCast
 
-@export var groundMovementLateralMovementSpeed : float = 10
-@export var groundMovementUpwardsMovementSpeed : float = 10
+## how much lateral acceleration will be added to the player's velocity while in the air
+@export var airLateralAcceleration: float = 2
+## the lateral component of a jump impulse from the ground
+@export var groundLateralMovementSpeed : float = 10
+## the upwards component of a jump impulse from the ground
+@export var groundUpwardsMovementSpeed : float = 10
 ## gravity while free flying
 @export var gravity : float
 ## gravity while grappled 
@@ -70,17 +74,20 @@ func _physics_process(delta):
 			var distToLineLength = (grappleToPlayer.length() - lineLength)
 			# pull the player towards the grapple point with strength exponentially relative to the how far from the line length they are
 			playerBody.velocity += distToLineLength * distToLineLength * springConstant * normalizedGrappleToPlayer * delta
+		else:
+			addAirMovement(delta)
 	# if we're not grappled
 	else:
 		# if we're grounded, we can do ground movement
 		if grounded:
 			# if we're only pressing one of the lateral buttons, initiate a lateral jump
 			if Input.is_action_pressed("Right") and not Input.is_action_pressed("Left"):
-				playerBody.velocity = Vector2(groundMovementLateralMovementSpeed, groundMovementUpwardsMovementSpeed)
+				playerBody.velocity = Vector2(groundLateralMovementSpeed, groundUpwardsMovementSpeed)
 			elif Input.is_action_pressed("Left") and not Input.is_action_pressed("Right"):
-				playerBody.velocity = Vector2(-groundMovementLateralMovementSpeed, groundMovementUpwardsMovementSpeed)
+				playerBody.velocity = Vector2(-groundLateralMovementSpeed, groundUpwardsMovementSpeed)
 		else:
 			playerBody.velocity += Vector2(0, gravity) * delta
+			addAirMovement(delta)
 	
 	var collision = playerBody.move_and_collide(playerBody.velocity)
 	# handle the bounce off walls and grounded-ness
@@ -99,6 +106,12 @@ func _physics_process(delta):
 		groundCast.force_shapecast_update()
 		if !groundCast.collision_result:
 			grounded = false
+
+func addAirMovement(delta):
+	if Input.is_action_pressed("Right") and not Input.is_action_pressed("Left"):
+		playerBody.velocity += Vector2(airLateralAcceleration, 0) * delta
+	elif Input.is_action_pressed("Left") and not Input.is_action_pressed("Right"):
+		playerBody.velocity += Vector2(-airLateralAcceleration, 0) * delta
 
 func _process(delta):
 	# while the grapple is still active on the screen
