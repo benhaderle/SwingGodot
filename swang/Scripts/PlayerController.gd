@@ -33,11 +33,6 @@ var grappleFlying : bool
 var grounded : bool 
 ## how long the grapple line length is
 var lineLength : float
-## whether or not we are currently free flying.
-## note that you can be grappled and free falling when the player's distance to a grapple point is less than the line length
-var freeFlying : bool
-## the max magnitude of velocity when grappled
-var grappledVel : float
 
 func _on_ready():
 	Utils.disableNode(grapple)
@@ -53,35 +48,26 @@ func _physics_process(delta):
 		
 		# if the player is further from the grapple point than the line is long (ie they need to be pulled back in)
 		if grappleToPlayer.length() >= lineLength:
-			# if we were freeflying prior to this frame, record a new grappledVel
-			if freeFlying:
-				grappledVel = playerBody.velocity.length()
-				freeFlying = false
-			
 			# the clockwise direction around the grapple point
 			var cw = Vector2(-normalizedGrappleToPlayer.y, normalizedGrappleToPlayer.x)
 			# the counter clockwise direction around the velocity
 			var ccw = Vector2(normalizedGrappleToPlayer.y, -normalizedGrappleToPlayer.x)
 			
 			# desired velocity is the velocity we'd have if the grapple line was inelastic without considering gravity
-			var desiredVelocity
+			var desiredDirection
 			# figure out which direction around the grapple point we're traveling in and then use the grappledVel to set the magnitude
 			if(cw.dot(playerBody.velocity) > ccw.dot(playerBody.velocity)):
-				desiredVelocity = grappledVel * cw
+				desiredDirection = cw
 			else:
-				desiredVelocity = grappledVel * ccw
+				desiredDirection = ccw
 #			
-			# ease the current velocity towards the current velocity
-			playerBody.velocity = lerp(playerBody.velocity, desiredVelocity, delta)
+			# ease the current velocity towards the desired direction
+			playerBody.velocity = playerBody.velocity.length() * lerp(playerBody.velocity.normalized(), desiredDirection.normalized(), delta)
 			
 			# how far the player is from being in the place they should be
 			var distToLineLength = (grappleToPlayer.length() - lineLength)
 			# pull the player towards the grapple point with strength exponentially relative to the how far from the line length they are
 			playerBody.velocity += distToLineLength * distToLineLength * springConstant * normalizedGrappleToPlayer * delta
-		# if we're grappled, but closer to the grapple point than the line length, then we're free flying
-		else:
-			freeFlying = true
-		
 	# if we're not grappled
 	else:
 		if grounded:
@@ -185,9 +171,7 @@ func move_grapple(startPosition : Vector2, target : Variant):
 			elif collider.get_collision_layer_value(1):
 				# set up everything to be free flying
 				grappled = true
-				freeFlying = false
 				lineLength = (playerBody.position - grapple.position).length()
-				grappledVel = playerBody.velocity.length()
 				
 		# wait for another frame before continuing to fly
 		await get_tree().physics_frame
