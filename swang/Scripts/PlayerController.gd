@@ -9,6 +9,8 @@ extends Node
 
 ## how much lateral acceleration will be added to the player's velocity while in the air
 @export var airLateralAcceleration: float = 2
+## how much downward acceleration will be added to the player's velocity while in the air
+@export var airDownwardAcceleration: float = 5
 ## the lateral component of a jump impulse from the ground
 @export var groundLateralMovementSpeed : float = 10
 ## the upwards component of a jump impulse from the ground
@@ -80,11 +82,12 @@ func _physics_process(delta):
 	else:
 		# if we're grounded, we can do ground movement
 		if grounded:
-			# if we're only pressing one of the lateral buttons, initiate a lateral jump
-			if Input.is_action_pressed("Right") and not Input.is_action_pressed("Left"):
-				playerBody.velocity = Vector2(groundLateralMovementSpeed, groundUpwardsMovementSpeed)
-			elif Input.is_action_pressed("Left") and not Input.is_action_pressed("Right"):
-				playerBody.velocity = Vector2(-groundLateralMovementSpeed, groundUpwardsMovementSpeed)
+			if not Input.is_action_pressed("Down"):
+				# if we're only pressing one of the lateral buttons, initiate a lateral jump
+				if Input.is_action_pressed("Right") and not Input.is_action_pressed("Left"):
+					playerBody.velocity = Vector2(groundLateralMovementSpeed, groundUpwardsMovementSpeed)
+				elif Input.is_action_pressed("Left") and not Input.is_action_pressed("Right"):
+					playerBody.velocity = Vector2(-groundLateralMovementSpeed, groundUpwardsMovementSpeed)
 		else:
 			playerBody.velocity += Vector2(0, gravity) * delta
 			addAirMovement(delta)
@@ -108,6 +111,9 @@ func _physics_process(delta):
 			grounded = false
 
 func addAirMovement(delta):
+	if Input.is_action_pressed("Down"):
+		playerBody.velocity += Vector2(0, airDownwardAcceleration) * delta
+		
 	if Input.is_action_pressed("Right") and not Input.is_action_pressed("Left"):
 		playerBody.velocity += Vector2(airLateralAcceleration, 0) * delta
 	elif Input.is_action_pressed("Left") and not Input.is_action_pressed("Right"):
