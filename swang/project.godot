@@ -21,6 +21,10 @@ window/size/viewport_width=3840
 window/size/viewport_height=2160
 window/stretch/mode="viewport"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/anthonyec.camera_preview/plugin.cfg")
+
 [input]
 
 Right={

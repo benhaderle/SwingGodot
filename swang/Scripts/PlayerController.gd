@@ -37,10 +37,11 @@ extends Node
 var grappled : bool
 ## whether or not the grapple is currently flying towards a target
 var grappleFlying : bool
-## whether or not we are stopped on the ground rn
-var grounded : bool 
 ## how long the grapple line length is
 var lineLength : float
+## whether or not we are stopped on the ground rn
+var grounded : bool 
+var groundNormal : Vector2
 
 func _on_ready():
 	Utils.disableNode(grapple)
@@ -85,9 +86,9 @@ func _physics_process(delta):
 			if not Input.is_action_pressed("Down"):
 				# if we're only pressing one of the lateral buttons, initiate a lateral jump
 				if Input.is_action_pressed("Right") and not Input.is_action_pressed("Left"):
-					playerBody.velocity = Vector2(groundLateralMovementSpeed, groundUpwardsMovementSpeed)
+					playerBody.velocity = Vector2(0, groundUpwardsMovementSpeed) + -groundNormal.orthogonal() * groundLateralMovementSpeed
 				elif Input.is_action_pressed("Left") and not Input.is_action_pressed("Right"):
-					playerBody.velocity = Vector2(-groundLateralMovementSpeed, groundUpwardsMovementSpeed)
+					playerBody.velocity = Vector2(0, groundUpwardsMovementSpeed) + groundNormal.orthogonal() * groundLateralMovementSpeed
 		else:
 			playerBody.velocity += Vector2(0, gravity) * delta
 			addAirMovement(delta)
@@ -102,6 +103,7 @@ func _physics_process(delta):
 		if playerBody.velocity.length_squared() < stopVelocityThreshold and collision.get_angle() < maxFloorAngle:
 			playerBody.velocity = Vector2(0, 0)
 			grounded = true
+			groundNormal = collision.get_normal()
 		else:
 			grounded = false
 	# if there was no collision, but we're currently grounded, check to make sure we're still grounded
