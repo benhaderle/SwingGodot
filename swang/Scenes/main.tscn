@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://nm0w0yqxo1k3"]
+[gd_scene load_steps=20 format=3 uid="uid://nm0w0yqxo1k3"]
 
 [ext_resource type="Shader" path="res://Shaders/background.gdshader" id="1_2umnk"]
 [ext_resource type="Texture2D" uid="uid://dhrmuxmi5xh3m" path="res://Art/reticle.png" id="2_mwa8p"]
@@ -6,7 +6,9 @@
 [ext_resource type="Script" path="res://Scripts/ReticleController.gd" id="3_7rstr"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.gd" id="4_5x65x"]
 [ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="7_mrs78"]
+[ext_resource type="Script" path="res://Scenes/NPCController.gd" id="8_gadaa"]
 [ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://Art/icon.svg" id="9_ifetg"]
+[ext_resource type="StyleBox" uid="uid://cyk38sbfnfcdo" path="res://Art/hudtextbox.tres" id="10_cn7d7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b32nj"]
 shader = ExtResource("1_2umnk")
@@ -37,6 +39,18 @@ radius = 256.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v0lyo"]
 size = Vector2(10, 10)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i3c6s"]
+size = Vector2(300, 300)
+
+[sub_resource type="Theme" id="Theme_v1q06"]
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.4)
+Label/constants/line_spacing = -14
+Label/constants/shadow_offset_x = 2
+Label/constants/shadow_offset_y = 2
+Label/constants/shadow_outline_size = 4
+Label/font_sizes/font_size = 32
+Label/styles/normal = ExtResource("10_cn7d7")
+
 [node name="Node2D" type="Node2D"]
 
 [node name="Level0" type="Node2D" parent="."]
@@ -44,7 +58,7 @@ size = Vector2(10, 10)
 [node name="Polygon2D" type="Polygon2D" parent="Level0"]
 material = SubResource("ShaderMaterial_b32nj")
 position = Vector2(23, -237)
-polygon = PackedVector2Array(-7827, -5454, -4437, 5154, 5917, 4186, 10121, -5253)
+polygon = PackedVector2Array(-7827, -5454, -4437, 5154, 14567, 5159, 14439, -5993)
 
 [node name="Border" type="Polygon2D" parent="Level0"]
 position = Vector2(0, -222)
@@ -59,57 +73,60 @@ visible = false
 position = Vector2(2.08165e-12, 2.08165e-12)
 polygon = PackedVector2Array(-2476, 1558, 1817, 1566, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3697, 1035, 4037, 2010, 3515, 2427, 2372, 2404, 2547, 1818, 2747, 976, 1909, 772, 1046, 816, 48, 1011, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -356, 976, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -2459, 967)
 
-[node name="RoomArea1" type="Area2D" parent="."]
+[node name="RoomAreaParent" type="Node2D" parent="."]
+visible = false
+
+[node name="RoomArea1" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-1355, 766)
 scale = Vector2(2, 2)
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomArea1"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea1"]
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_so4df")
 
-[node name="Camera2D" type="Camera2D" parent="RoomArea1"]
+[node name="Camera2D" type="Camera2D" parent="RoomAreaParent/RoomArea1"]
 zoom = Vector2(3.84, 3.84)
 script = ExtResource("2_ok7kf")
 
-[node name="RoomArea2" type="Area2D" parent="."]
+[node name="RoomArea2" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 766)
 scale = Vector2(2, 2)
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomArea2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea2"]
 position = Vector2(450.25, -181)
 shape = SubResource("RectangleShape2D_pnb57")
 
-[node name="Camera2D" type="Camera2D" parent="RoomArea2"]
+[node name="Camera2D" type="Camera2D" parent="RoomAreaParent/RoomArea2"]
 position = Vector2(449.5, -261.5)
 zoom = Vector2(1.37, 1.37)
 script = ExtResource("2_ok7kf")
 
-[node name="RoomArea3" type="Area2D" parent="."]
+[node name="RoomArea3" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 766)
 scale = Vector2(2, 2)
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomArea3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea3"]
 position = Vector2(2117.38, -366)
 shape = SubResource("RectangleShape2D_m5d18")
 
-[node name="Camera2D" type="Camera2D" parent="RoomArea3"]
+[node name="Camera2D" type="Camera2D" parent="RoomAreaParent/RoomArea3"]
 position = Vector2(2119.5, -402.5)
 zoom = Vector2(0.99, 0.99)
 script = ExtResource("2_ok7kf")
 
-[node name="RoomArea4" type="Area2D" parent="."]
+[node name="RoomArea4" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 2846)
 scale = Vector2(2, 2)
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomArea4"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea4"]
 position = Vector2(1804.5, -595.5)
 shape = SubResource("RectangleShape2D_gwljw")
 
-[node name="Camera2D" type="Camera2D" parent="RoomArea4"]
+[node name="Camera2D" type="Camera2D" parent="RoomAreaParent/RoomArea4"]
 position = Vector2(1806.5, -513.5)
 zoom = Vector2(1.43, 1.43)
 script = ExtResource("2_ok7kf")
@@ -162,6 +179,7 @@ shape = SubResource("CircleShape2D_fhpe3")
 position = Vector2(-1319, 928)
 scale = Vector2(2, 2)
 collision_layer = 2
+collision_mask = 5
 slide_on_ceiling = false
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerController/PlayerBody"]
@@ -177,12 +195,42 @@ shape = SubResource("RectangleShape2D_nu8wk")
 shape = SubResource("RectangleShape2D_v0lyo")
 target_position = Vector2(0, 8)
 
+[node name="NPC" type="Area2D" parent="."]
+position = Vector2(689, 588)
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("8_gadaa")
+dialogueLine = "Bro it is way too wet in this cave..."
+
+[node name="Sprite2D" type="Sprite2D" parent="NPC"]
+self_modulate = Color(0, 1, 0.166667, 1)
+texture = ExtResource("9_ifetg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPC"]
+shape = SubResource("RectangleShape2D_i3c6s")
+
+[node name="Label" type="Label" parent="NPC"]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -168.0
+offset_right = 21.0
+offset_bottom = -83.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_v1q06")
+
 [connection signal="mouse_entered" from="Level0/Border/StaticBody2D" to="ReticleController" method="_on_mouse_entered_grapple_area"]
 [connection signal="mouse_exited" from="Level0/Border/StaticBody2D" to="ReticleController" method="_on_mouse_exited_grapple_area"]
-[connection signal="body_entered" from="RoomArea1" to="RoomArea1/Camera2D" method="_on_area_2d_body_entered"]
-[connection signal="body_entered" from="RoomArea2" to="RoomArea2/Camera2D" method="_on_area_2d_body_entered"]
-[connection signal="body_entered" from="RoomArea3" to="RoomArea3/Camera2D" method="_on_area_2d_body_entered"]
-[connection signal="body_entered" from="RoomArea4" to="RoomArea4/Camera2D" method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="RoomAreaParent/RoomArea1" to="RoomAreaParent/RoomArea1/Camera2D" method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="RoomAreaParent/RoomArea2" to="RoomAreaParent/RoomArea2/Camera2D" method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="RoomAreaParent/RoomArea3" to="RoomAreaParent/RoomArea3/Camera2D" method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="RoomAreaParent/RoomArea4" to="RoomAreaParent/RoomArea4/Camera2D" method="_on_area_2d_body_entered"]
 [connection signal="clicked_on_grapple_area" from="ReticleController" to="PlayerController" method="_on_reticle_clicked_on_grapple_area"]
 [connection signal="clicked_release_from_grapple_area" from="ReticleController" to="PlayerController" method="_on_clicked_release_from_grapple_area"]
 [connection signal="ready" from="PlayerController" to="PlayerController" method="_on_ready"]
+[connection signal="body_entered" from="NPC" to="NPC" method="_on_body_entered"]
+[connection signal="body_exited" from="NPC" to="NPC" method="_on_body_exited"]
