@@ -128,11 +128,10 @@ func _process(delta):
 		# make sure the line node is enabled
 		Utils.enableNode(grappleLine)
 		
-		# do shortening if necessary
-		if Input.is_action_pressed("Shorten"):
-			lineLength -= shortenSpeed * delta
-			lineLength = clampf(lineLength, minLineLength, INF)
-		
+		# shorten the line
+		lineLength -= shortenSpeed * delta
+		lineLength = clampf(lineLength, minLineLength, INF)
+			
 		# update the points
 		grappleLine.points[0] = playerBody.position
 		grappleLine.points[1] = grapple.position

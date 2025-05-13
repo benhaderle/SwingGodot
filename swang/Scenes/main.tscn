@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/ReticleController.gd" id="3_7rstr"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.gd" id="4_5x65x"]
 [ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="7_mrs78"]
-[ext_resource type="Script" path="res://Scenes/NPCController.gd" id="8_gadaa"]
+[ext_resource type="Script" path="res://Scripts/NPCController.gd" id="8_gadaa"]
 [ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://Art/icon.svg" id="9_ifetg"]
 [ext_resource type="StyleBox" uid="uid://cyk38sbfnfcdo" path="res://Art/hudtextbox.tres" id="10_cn7d7"]
 
@@ -210,7 +210,9 @@ texture = ExtResource("9_ifetg")
 shape = SubResource("RectangleShape2D_i3c6s")
 
 [node name="Label" type="Label" parent="NPC"]
-anchors_preset = -1
+z_index = 1
+z_as_relative = false
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
