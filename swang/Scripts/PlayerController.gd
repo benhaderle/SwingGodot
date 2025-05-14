@@ -1,5 +1,7 @@
 extends Node
 
+signal grappled
+
 @onready var playerBody = $PlayerBody
 @onready var trail : Line2D = $TrailLine
 @onready var debugLine : Line2D = $DebugLine
@@ -34,7 +36,7 @@ extends Node
 ## the maximum angle counted as a floor in radians 
 @export var maxFloorAngle : float = .8
 ## whether or not we are currently grappled
-var grappled : bool
+var isGrappled : bool
 ## whether or not the grapple is currently flying towards a target
 var grappleFlying : bool
 ## how long the grapple line length is
@@ -43,12 +45,12 @@ var lineLength : float
 var grounded : bool 
 var groundNormal : Vector2
 
-func _on_ready():
+func _ready():
 	Utils.disableNode(grapple)
 
 func _physics_process(delta):
 	debugLine.points[0] = playerBody.position
-	if grappled:
+	if isGrappled:
 		# add the grapple gravity
 		playerBody.velocity += Vector2(0, grappleGravity) * delta
 		
@@ -144,7 +146,7 @@ func _process(delta):
 # if we're no longer holding the grapple input, move the grapple back to the player
 func _on_clicked_release_from_grapple_area():
 	move_grapple(grapple.position, playerBody)
-	grappled = false
+	isGrappled = false
 
 # if we clicked on a grapple area, move the grapple towards the clicked point
 func _on_reticle_clicked_on_grapple_area(clickPosition):
@@ -194,11 +196,29 @@ func move_grapple(startPosition : Vector2, target : Variant):
 			# layer 1 is any grapple-able surface
 			elif collider.get_collision_layer_value(1):
 				# set up everything to be free flying
-				grappled = true
+				isGrappled = true
 				lineLength = (playerBody.position - grapple.position).length()
+				on_grappled()
 				
 		# wait for another frame before continuing to fly
 		await get_tree().physics_frame
 		
-		# enable the collision shape after one frame of movement 
-		grapple.get_node("CollisionShape2D").disabled = false
+		if grappleFlying:
+			# enable the collision shape after one frame of movement 
+			grapple.get_node("CollisionShape2D").disabled = false
+
+func on_grappled():
+	# wait for the line renderer to catch up
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	grappled.emit()
+	
+	get_tree().paused = true
+	
+	var t = .1
+	while t > 0:
+		await get_tree().process_frame
+		t -= get_process_delta_time()
+	
+	get_tree().paused = false

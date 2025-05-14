@@ -143,6 +143,7 @@ normalScale = 0.1
 pressedDownScale = 0.08
 
 [node name="PlayerController" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("4_5x65x")
 gravity = 10.0
 grappleGravity = 10.0
@@ -233,6 +234,5 @@ theme = SubResource("Theme_v1q06")
 [connection signal="body_entered" from="RoomAreaParent/RoomArea4" to="RoomAreaParent/RoomArea4/Camera2D" method="_on_area_2d_body_entered"]
 [connection signal="clicked_on_grapple_area" from="ReticleController" to="PlayerController" method="_on_reticle_clicked_on_grapple_area"]
 [connection signal="clicked_release_from_grapple_area" from="ReticleController" to="PlayerController" method="_on_clicked_release_from_grapple_area"]
-[connection signal="ready" from="PlayerController" to="PlayerController" method="_on_ready"]
 [connection signal="body_entered" from="NPC" to="NPC" method="_on_body_entered"]
 [connection signal="body_exited" from="NPC" to="NPC" method="_on_body_exited"]
