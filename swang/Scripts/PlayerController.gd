@@ -8,6 +8,7 @@ signal grappled
 @onready var grapple = $Grapple
 @onready var grappleLine = $GrappleLine
 @onready var groundCast = $PlayerBody/GroundCast
+@onready var sprite = $PlayerBody/AnimatedSprite2D
 
 ## how much lateral acceleration will be added to the player's velocity while in the air
 @export var airLateralAcceleration: float = 2
@@ -89,8 +90,10 @@ func _physics_process(delta):
 				# if we're only pressing one of the lateral buttons, initiate a lateral jump
 				if Input.is_action_pressed("Right") and not Input.is_action_pressed("Left"):
 					playerBody.velocity = Vector2(0, groundUpwardsMovementSpeed) + -groundNormal.orthogonal() * groundLateralMovementSpeed
+					sprite.play("jumpLaunch")
 				elif Input.is_action_pressed("Left") and not Input.is_action_pressed("Right"):
 					playerBody.velocity = Vector2(0, groundUpwardsMovementSpeed) + groundNormal.orthogonal() * groundLateralMovementSpeed
+					sprite.play("jumpLaunch")
 		else:
 			playerBody.velocity += Vector2(0, gravity) * delta
 			addAirMovement(delta)
@@ -100,14 +103,16 @@ func _physics_process(delta):
 	if collision:
 		# TODO: make the bounceFactor dependent on the surface we're bouncing on
 		playerBody.velocity = playerBody.velocity.bounce(collision.get_normal()) * bounceFactor
+		groundNormal = collision.get_normal()
 		
 		# if our velocity is less than the stop threshold and we're on a floor, stop the player
 		if playerBody.velocity.length_squared() < stopVelocityThreshold and collision.get_angle() < maxFloorAngle:
 			playerBody.velocity = Vector2(0, 0)
 			grounded = true
-			groundNormal = collision.get_normal()
+			sprite.play("landing")
 		else:
 			grounded = false
+			sprite.play("bounce")
 	# if there was no collision, but we're currently grounded, check to make sure we're still grounded
 	elif grounded:
 		groundCast.force_shapecast_update()
@@ -142,6 +147,29 @@ func _process(delta):
 	
 	# update the trail
 	trail.add_point(playerBody.global_position)
+	
+	# setting sprite rotation
+	var targetRotation = lerp_angle(sprite.rotation, Vector2.UP.angle_to(-playerBody.velocity), 2 * delta)
+	if grounded:
+		targetRotation = Vector2.UP.angle_to(groundNormal)
+	elif groundCast.is_colliding():
+		targetRotation = lerp_angle(sprite.rotation, Vector2.UP.angle_to(groundCast.collision_result[0].normal), 2 * delta)
+	
+	sprite.rotation = targetRotation
+	
+	if !sprite.is_playing():
+		if grounded:
+			sprite.play("idle")
+		else:
+			if playerBody.velocity.y < -1:
+				sprite.play("midairRise")
+			elif playerBody.velocity.y > 1:
+				sprite.play("midairFall")
+			else:
+				sprite.play("midairHang")
+	
+	if abs(playerBody.velocity.x) > 0:
+		sprite.flip_h = playerBody.velocity.x < 0
 
 # if we're no longer holding the grapple input, move the grapple back to the player
 func _on_clicked_release_from_grapple_area():

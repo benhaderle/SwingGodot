@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://nm0w0yqxo1k3"]
+[gd_scene load_steps=21 format=3 uid="uid://nm0w0yqxo1k3"]
 
 [ext_resource type="Shader" path="res://Shaders/background.gdshader" id="1_2umnk"]
 [ext_resource type="Texture2D" uid="uid://dhrmuxmi5xh3m" path="res://Art/reticle.png" id="2_mwa8p"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/ReticleController.gd" id="3_7rstr"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.gd" id="4_5x65x"]
 [ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="7_mrs78"]
+[ext_resource type="SpriteFrames" uid="uid://bnwcsx30oc8bi" path="res://Art/frogSpriteFrames.tres" id="8_6lftg"]
 [ext_resource type="Script" path="res://Scripts/NPCController.gd" id="8_gadaa"]
 [ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://Art/icon.svg" id="9_ifetg"]
 [ext_resource type="StyleBox" uid="uid://cyk38sbfnfcdo" path="res://Art/hudtextbox.tres" id="10_cn7d7"]
@@ -34,7 +35,7 @@ size = Vector2(947, 607)
 [sub_resource type="CircleShape2D" id="CircleShape2D_fhpe3"]
 radius = 256.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_nu8wk"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_nyt3n"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v0lyo"]
 size = Vector2(10, 10)
@@ -57,13 +58,13 @@ Label/styles/normal = ExtResource("10_cn7d7")
 
 [node name="Polygon2D" type="Polygon2D" parent="Level0"]
 material = SubResource("ShaderMaterial_b32nj")
-position = Vector2(23, -237)
+position = Vector2(38, -220)
 polygon = PackedVector2Array(-7827, -5454, -4437, 5154, 14567, 5159, 14439, -5993)
 
 [node name="Border" type="Polygon2D" parent="Level0"]
 position = Vector2(0, -222)
 color = Color(0.1537, 0.1537, 0.29, 1)
-polygon = PackedVector2Array(-2476, 1558, 1817, 1566, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3697, 1035, 4037, 2010, 3515, 2427, 2372, 2404, 2547, 1818, 2747, 976, 1909, 772, 1046, 816, 48, 1011, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -356, 976, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -2459, 967)
+polygon = PackedVector2Array(-2476, 1558, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -356, 976, -410, 722, -537, 676, -841, 746, -1027, 814, -1412, 738, -1632, 674, -1579, 490, -1186, 504, -754, 593, -593, 325, -578, 108, -295, 131, -76, 58, -624, -135, -1041, 10, -1462, -276, -1011, -530, -560, -274, 233, -397, 618, -430, 1020, -450, 1425, -397, 1674, -346, 1590, -167, 1431, -121, 1059, -251, 706, -80, 299, 186, -166, 417, -549, 503, -342, 547, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -2459, 967)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Level0/Border"]
 input_pickable = true
@@ -71,7 +72,7 @@ input_pickable = true
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Level0/Border/StaticBody2D"]
 visible = false
 position = Vector2(2.08165e-12, 2.08165e-12)
-polygon = PackedVector2Array(-2476, 1558, 1817, 1566, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3697, 1035, 4037, 2010, 3515, 2427, 2372, 2404, 2547, 1818, 2747, 976, 1909, 772, 1046, 816, 48, 1011, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -356, 976, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -2459, 967)
+polygon = PackedVector2Array(-2476, 1558, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -356, 976, -410, 722, -537, 676, -841, 746, -1027, 814, -1412, 738, -1632, 674, -1579, 490, -1186, 504, -754, 593, -593, 325, -578, 108, -295, 131, -76, 58, -624, -135, -1041, 10, -1462, -276, -1011, -530, -560, -274, 233, -397, 618, -430, 1020, -450, 1425, -397, 1674, -346, 1590, -167, 1431, -121, 1059, -251, 706, -80, 299, 186, -166, 417, -549, 503, -342, 547, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -2459, 967)
 
 [node name="RoomAreaParent" type="Node2D" parent="."]
 visible = false
@@ -184,20 +185,28 @@ collision_mask = 5
 slide_on_ceiling = false
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerController/PlayerBody"]
+visible = false
 position = Vector2(2.08165e-12, 2.08165e-12)
 scale = Vector2(0.15625, 0.15625)
 texture = ExtResource("9_ifetg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerController/PlayerBody"]
 position = Vector2(2.08165e-12, 2.08165e-12)
-shape = SubResource("RectangleShape2D_nu8wk")
+shape = SubResource("CircleShape2D_nyt3n")
 
 [node name="GroundCast" type="ShapeCast2D" parent="PlayerController/PlayerBody"]
 shape = SubResource("RectangleShape2D_v0lyo")
-target_position = Vector2(0, 8)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="PlayerController/PlayerBody"]
+position = Vector2(0, 5)
+scale = Vector2(0.025, 0.025)
+sprite_frames = ExtResource("8_6lftg")
+animation = &"bounce"
+autoplay = "idle"
+speed_scale = 3.0
 
 [node name="NPC" type="Area2D" parent="."]
-position = Vector2(689, 588)
+position = Vector2(678, 749)
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("8_gadaa")
@@ -234,5 +243,6 @@ theme = SubResource("Theme_v1q06")
 [connection signal="body_entered" from="RoomAreaParent/RoomArea4" to="RoomAreaParent/RoomArea4/Camera2D" method="_on_area_2d_body_entered"]
 [connection signal="clicked_on_grapple_area" from="ReticleController" to="PlayerController" method="_on_reticle_clicked_on_grapple_area"]
 [connection signal="clicked_release_from_grapple_area" from="ReticleController" to="PlayerController" method="_on_clicked_release_from_grapple_area"]
+[connection signal="animation_finished" from="PlayerController/PlayerBody/AnimatedSprite2D" to="PlayerController" method="_on_animation_finished"]
 [connection signal="body_entered" from="NPC" to="NPC" method="_on_body_entered"]
 [connection signal="body_exited" from="NPC" to="NPC" method="_on_body_exited"]
