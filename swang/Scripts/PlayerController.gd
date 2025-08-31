@@ -45,12 +45,50 @@ var lineLength : float
 ## whether or not we are stopped on the ground rn
 var grounded : bool 
 var groundNormal : Vector2
+var grappleTarget
 
 func _ready():
 	Utils.disableNode(grapple)
+	process_physics_priority = 10
 
 func _physics_process(delta):
 	debugLine.points[0] = playerBody.position
+	if grappleFlying:
+		# getting the direction to fly in is different depending on what target we were given
+		var direction : Vector2
+		# if the given target is a position vector
+		if grappleTarget is Vector2:
+			direction = (grappleTarget - grapple.position).normalized()
+		# if the given target is another node
+		elif grappleTarget is Node2D:
+			direction = (grappleTarget.position - grapple.position).normalized()
+		
+		# move the grapple and record any collision
+		var collision : KinematicCollision2D = grapple.move_and_collide(grappleFlyingSpeed * direction * delta)
+		
+		# if there was a collision, it's time to do some stuff
+		if collision != null:
+			
+			var collider : CollisionObject2D = collision.get_collider()
+			# layer 2 is the player layer
+			if collider.get_collision_layer_value(2):
+				grappleFlying = false
+				grapple.position = collision.get_position()
+				Utils.disableNode(grapple)
+				sprite.stop()
+			# layer 1 is any grapple-able surface
+			elif collider.get_collision_layer_value(1) and Input.is_action_pressed("Grapple"):
+				grappleFlying = false
+				grapple.position = collision.get_position()
+				# set up everything to be free flying
+				isGrappled = true
+				lineLength = (playerBody.position - grapple.position).length()
+				on_grappled()
+		
+		if grappleFlying:
+			# enable the collision shape after one frame of movement 
+			grapple.get_node("CollisionShape2D").disabled = false
+				
 	if isGrappled:
 		# add the grapple gravity
 		playerBody.velocity += Vector2(0, grappleGravity) * delta
@@ -107,7 +145,8 @@ func _physics_process(delta):
 		
 		# if our velocity is less than the stop threshold and we're on a floor, stop the player
 		if isGrappled:
-			print("collision while grappled")
+			var i = 0
+			#print("collision while grappled")
 		elif playerBody.velocity.length_squared() < stopVelocityThreshold and collision.get_angle() < maxFloorAngle:
 			playerBody.velocity = Vector2(0, 0)
 			grounded = true
@@ -178,78 +217,37 @@ func _process(delta):
 	
 	if abs(playerBody.velocity.x) > 0:
 		sprite.flip_h = playerBody.velocity.x < 0
+	
 
 # if we're no longer holding the grapple input, move the grapple back to the player
 func _on_clicked_release_from_grapple_area():
 	sprite.play("grappleFlying")
-	move_grapple(grapple.position, playerBody)
+	
 	isGrappled = false
+	grappleFlying = true
+	Utils.enableNode(grapple)
+	grappleTarget = playerBody
+	grapple.get_node("CollisionShape2D").disabled = true
+	grapple.collision_mask = 2
 
 # if we clicked on a grapple area, move the grapple towards the clicked point
 func _on_reticle_clicked_on_grapple_area(clickPosition):
 	sprite.play("grappleLaunch")
-	move_grapple(playerBody.position, clickPosition)
-
-## coroutine that moves the grapple towards the provided target. runs on the physics loop
-func move_grapple(startPosition : Vector2, target : Variant):
-	# reset grappleFlying
-	grappleFlying = false
 	
-	# wait for one frame so we can stop any other occurences of this routine
-	await get_tree().physics_frame
-	
-	# grappleFlying is basically the semafor for this routine
 	grappleFlying = true
-	
-	# set the initial grapple position and enable the grapple node
 	Utils.enableNode(grapple)
-	grapple.position = startPosition
-	
-	# disable collision shape for one frame so we can start to fly
+	grapple.position = playerBody.position
+	grappleTarget = clickPosition
 	grapple.get_node("CollisionShape2D").disabled = true
-	
-	while grappleFlying:
-		# getting the direction to fly in is different depending on what target we were given
-		var direction : Vector2
-		# if the given target is a position vector
-		if target is Vector2:
-			direction = (target - grapple.position).normalized()
-		# if the given target is another node
-		elif target is Node2D:
-			direction = (target.position - grapple.position).normalized()
-		
-		# move the grapple and record any collision
-		var collision : KinematicCollision2D = grapple.move_and_collide(grappleFlyingSpeed * direction * get_physics_process_delta_time())
-		
-		# if there was a collision, it's time to do some stuff
-		if collision != null:
-			# no matter what we hit, set grappleFlying to false so that this routine will end
-			grappleFlying = false
-			grapple.position = collision.get_position()
-			
-			var collider : CollisionObject2D = collision.get_collider()
-			# layer 2 is the player layer
-			if collider.get_collision_layer_value(2):
-				Utils.disableNode(grapple)
-				sprite.stop()
-			# layer 1 is any grapple-able surface
-			elif collider.get_collision_layer_value(1):
-				# set up everything to be free flying
-				isGrappled = true
-				lineLength = (playerBody.position - grapple.position).length()
-				on_grappled()
-				
-		# wait for another frame before continuing to fly
-		await get_tree().physics_frame
-		
-		if grappleFlying:
-			# enable the collision shape after one frame of movement 
-			grapple.get_node("CollisionShape2D").disabled = false
+	grapple.collision_mask = 1
 
 func on_grappled():
 	# wait for the line renderer to catch up
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	
+	if !isGrappled:
+		return
 	
 	grappled.emit()
 	
@@ -259,7 +257,7 @@ func on_grappled():
 	
 	var t = .1
 	while t > 0:
-		await get_tree().process_frame
+		await get_tree().physics_frame
 		t -= get_process_delta_time()
 	
 	get_tree().paused = false
