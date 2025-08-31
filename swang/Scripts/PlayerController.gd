@@ -150,7 +150,9 @@ func _process(delta):
 	
 	# setting sprite rotation
 	var targetRotation = lerp_angle(sprite.rotation, Vector2.UP.angle_to(-playerBody.velocity), 2 * delta)
-	if grounded:
+	if isGrappled || grappleFlying:
+		targetRotation = Vector2.UP.angle_to(grapple.position - playerBody.position)
+	elif grounded:
 		targetRotation = Vector2.UP.angle_to(groundNormal)
 	elif groundCast.is_colliding():
 		targetRotation = lerp_angle(sprite.rotation, Vector2.UP.angle_to(groundCast.collision_result[0].normal), 2 * delta)
@@ -158,7 +160,11 @@ func _process(delta):
 	sprite.rotation = targetRotation
 	
 	if !sprite.is_playing():
-		if grounded:
+		if grappleFlying:
+			sprite.play("grappleFlying")
+		elif isGrappled:
+			sprite.play("grappledLoop")
+		elif grounded:
 			sprite.play("idle")
 		else:
 			if playerBody.velocity.y < -1:
@@ -173,11 +179,13 @@ func _process(delta):
 
 # if we're no longer holding the grapple input, move the grapple back to the player
 func _on_clicked_release_from_grapple_area():
+	sprite.play("grappleFlying")
 	move_grapple(grapple.position, playerBody)
 	isGrappled = false
 
 # if we clicked on a grapple area, move the grapple towards the clicked point
 func _on_reticle_clicked_on_grapple_area(clickPosition):
+	sprite.play("grappleLaunch")
 	move_grapple(playerBody.position, clickPosition)
 
 ## coroutine that moves the grapple towards the provided target. runs on the physics loop
@@ -221,6 +229,7 @@ func move_grapple(startPosition : Vector2, target : Variant):
 			# layer 2 is the player layer
 			if collider.get_collision_layer_value(2):
 				Utils.disableNode(grapple)
+				sprite.stop()
 			# layer 1 is any grapple-able surface
 			elif collider.get_collision_layer_value(1):
 				# set up everything to be free flying
@@ -241,6 +250,8 @@ func on_grappled():
 	await get_tree().process_frame
 	
 	grappled.emit()
+	
+	sprite.play("grappledStart")
 	
 	get_tree().paused = true
 	

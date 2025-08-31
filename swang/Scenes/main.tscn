@@ -36,6 +36,7 @@ size = Vector2(947, 607)
 radius = 256.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nyt3n"]
+radius = 7.15891
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v0lyo"]
 size = Vector2(10, 10)
@@ -58,7 +59,7 @@ Label/styles/normal = ExtResource("10_cn7d7")
 
 [node name="Polygon2D" type="Polygon2D" parent="Level0"]
 material = SubResource("ShaderMaterial_b32nj")
-position = Vector2(38, -220)
+position = Vector2(36, -224)
 polygon = PackedVector2Array(-7827, -5454, -4437, 5154, 14567, 5159, 14439, -5993)
 
 [node name="Border" type="Polygon2D" parent="Level0"]
@@ -151,6 +152,7 @@ grappleGravity = 10.0
 
 [node name="GrappleLine" type="Line2D" parent="PlayerController"]
 points = PackedVector2Array(0, 0, 0, 0)
+width = 3.0
 default_color = Color(0.788235, 0.54902, 0.976471, 1)
 
 [node name="TrailLine" type="Line2D" parent="PlayerController"]
@@ -191,17 +193,16 @@ scale = Vector2(0.15625, 0.15625)
 texture = ExtResource("9_ifetg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerController/PlayerBody"]
-position = Vector2(2.08165e-12, 2.08165e-12)
+position = Vector2(0, -2.97)
 shape = SubResource("CircleShape2D_nyt3n")
 
 [node name="GroundCast" type="ShapeCast2D" parent="PlayerController/PlayerBody"]
 shape = SubResource("RectangleShape2D_v0lyo")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="PlayerController/PlayerBody"]
-position = Vector2(0, 5)
 scale = Vector2(0.025, 0.025)
 sprite_frames = ExtResource("8_6lftg")
-animation = &"bounce"
+animation = &"jumpLaunch"
 autoplay = "idle"
 speed_scale = 3.0
 

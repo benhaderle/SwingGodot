@@ -14,6 +14,10 @@ region = Rect2(1000, 6000, 1000, 1000)
 atlas = ExtResource("1_g5h7n")
 region = Rect2(1000, 1000, 1000, 1000)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8bey"]
+atlas = ExtResource("1_g5h7n")
+region = Rect2(0, 2000, 1000, 1000)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ogljj"]
 atlas = ExtResource("1_g5h7n")
 region = Rect2(0, 0, 1000, 1000)
@@ -22,25 +26,21 @@ region = Rect2(0, 0, 1000, 1000)
 atlas = ExtResource("1_g5h7n")
 region = Rect2(0, 1000, 1000, 1000)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_g17db"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1r6b7"]
 atlas = ExtResource("1_g5h7n")
-region = Rect2(0, 2000, 1000, 1000)
+region = Rect2(0, 4000, 1000, 1000)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_o3pni"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_mypua"]
 atlas = ExtResource("1_g5h7n")
 region = Rect2(0, 3000, 1000, 1000)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_thwh3"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1jjvn"]
 atlas = ExtResource("1_g5h7n")
 region = Rect2(0, 4000, 1000, 1000)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_axpun"]
 atlas = ExtResource("1_g5h7n")
 region = Rect2(0, 0, 1000, 1000)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lnrjb"]
-atlas = ExtResource("1_g5h7n")
-region = Rect2(1000, 0, 1000, 1000)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m7a2g"]
 atlas = ExtResource("1_g5h7n")
@@ -92,22 +92,40 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_r8bey")
+}],
+"loop": true,
+"name": &"grappleFlying",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ogljj")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0wwt8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_g17db")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_o3pni")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_thwh3")
 }],
 "loop": false,
-"name": &"grapple",
+"name": &"grappleLaunch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1r6b7")
+}],
+"loop": true,
+"name": &"grappledLoop",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mypua")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1jjvn")
+}],
+"loop": false,
+"name": &"grappledStart",
 "speed": 5.0
 }, {
 "frames": [{
@@ -119,9 +137,6 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lnrjb")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_m7a2g")
 }, {
