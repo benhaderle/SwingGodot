@@ -106,7 +106,9 @@ func _physics_process(delta):
 		groundNormal = collision.get_normal()
 		
 		# if our velocity is less than the stop threshold and we're on a floor, stop the player
-		if playerBody.velocity.length_squared() < stopVelocityThreshold and collision.get_angle() < maxFloorAngle:
+		if isGrappled:
+			print("collision while grappled")
+		elif playerBody.velocity.length_squared() < stopVelocityThreshold and collision.get_angle() < maxFloorAngle:
 			playerBody.velocity = Vector2(0, 0)
 			grounded = true
 			sprite.play("landing")
