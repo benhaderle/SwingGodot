@@ -2,9 +2,12 @@ extends Camera2D
 
 func _ready() -> void:
 	%PlayerController.grappled.connect(on_grappled)
+	SignalBus.room_area_entered.connect(on_room_area_entered)
 
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	make_current()
+func on_room_area_entered(roomCenter : Vector2, roomBounds : Rect2):
+	global_position = roomCenter
+	zoom = Vector2.ONE * minf(get_viewport_rect().size.x / roomBounds.size.x, get_viewport_rect().size.y / roomBounds.size.y)
+	pass
 
 func on_grappled() -> void:
 	if is_current():

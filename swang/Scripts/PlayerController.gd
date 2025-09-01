@@ -250,6 +250,7 @@ func on_grappled():
 		return
 	
 	grappled.emit()
+	grounded = false
 	
 	sprite.play("grappledStart")
 	

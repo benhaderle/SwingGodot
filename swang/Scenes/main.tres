@@ -1,0 +1,19 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://ct6c5locyme11"]
+
+[ext_resource type="StyleBox" uid="uid://cyk38sbfnfcdo" path="res://Art/hudtextbox.tres" id="1_h8cn4"]
+
+[resource]
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.4)
+Label/constants/line_spacing = -14
+Label/constants/shadow_offset_x = 2
+Label/constants/shadow_offset_y = 2
+Label/constants/shadow_outline_size = 4
+Label/font_sizes/font_size = 32
+Label/styles/normal = ExtResource("1_h8cn4")
+RichTextLabel/colors/font_shadow_color = Color(0, 0, 0, 0.4)
+RichTextLabel/constants/line_separation = -10
+RichTextLabel/constants/shadow_offset_x = 2
+RichTextLabel/constants/shadow_offset_y = 2
+RichTextLabel/constants/shadow_outline_size = 4
+RichTextLabel/font_sizes/normal_font_size = 32
+RichTextLabel/styles/normal = ExtResource("1_h8cn4")

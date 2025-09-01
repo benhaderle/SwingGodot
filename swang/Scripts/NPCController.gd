@@ -1,16 +1,10 @@
 class_name NPCController
 extends Area2D
 
-@onready var label = $Label
-
 @export var dialogueLine : String
 
-func _ready() -> void:
-	label.hide()
-
 func _on_body_entered(body: Node2D) -> void:
-	label.text = dialogueLine
-	label.show()
+	SignalBus.dialogue_entered.emit(dialogueLine, position - Vector2(0, $Sprite2D.get_rect().size.y * .5))
 
 func _on_body_exited(body: Node2D) -> void:
-	label.hide()
+	SignalBus.dialogue_exited.emit()

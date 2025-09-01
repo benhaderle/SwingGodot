@@ -1,15 +1,17 @@
-[gd_scene load_steps=21 format=3 uid="uid://nm0w0yqxo1k3"]
+[gd_scene load_steps=23 format=3 uid="uid://nm0w0yqxo1k3"]
 
 [ext_resource type="Shader" path="res://Shaders/background.gdshader" id="1_2umnk"]
+[ext_resource type="Script" path="res://Scripts/UIController.gd" id="1_hhfyu"]
+[ext_resource type="Theme" uid="uid://ct6c5locyme11" path="res://Scenes/main.tres" id="2_8cqcx"]
 [ext_resource type="Texture2D" uid="uid://dhrmuxmi5xh3m" path="res://Art/reticle.png" id="2_mwa8p"]
 [ext_resource type="Script" path="res://Scripts/CameraController.gd" id="2_ok7kf"]
 [ext_resource type="Script" path="res://Scripts/ReticleController.gd" id="3_7rstr"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.gd" id="4_5x65x"]
+[ext_resource type="Script" path="res://Scripts/RoomAreaController.gd" id="5_fn3gd"]
 [ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="7_mrs78"]
 [ext_resource type="SpriteFrames" uid="uid://bnwcsx30oc8bi" path="res://Art/frogSpriteFrames.tres" id="8_6lftg"]
 [ext_resource type="Script" path="res://Scripts/NPCController.gd" id="8_gadaa"]
 [ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://Art/icon.svg" id="9_ifetg"]
-[ext_resource type="StyleBox" uid="uid://cyk38sbfnfcdo" path="res://Art/hudtextbox.tres" id="10_cn7d7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b32nj"]
 shader = ExtResource("1_2umnk")
@@ -21,16 +23,19 @@ shader_parameter/timeScale = 2.08165e-12
 shader_parameter/resolution = Vector2(300, 200)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_so4df"]
-size = Vector2(499, 282)
+size = Vector2(1044, 531)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pnb57"]
-size = Vector2(1400.5, 644)
+size = Vector2(2707, 1192)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5d18"]
-size = Vector2(1929.25, 1011)
+size = Vector2(1979.62, 1987)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gwljw"]
-size = Vector2(947, 607)
+size = Vector2(1212, 912)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dwcay"]
+size = Vector2(1069, 465)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fhpe3"]
 radius = 256.0
@@ -44,16 +49,20 @@ size = Vector2(10, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i3c6s"]
 size = Vector2(300, 300)
 
-[sub_resource type="Theme" id="Theme_v1q06"]
-Label/colors/font_shadow_color = Color(0, 0, 0, 0.4)
-Label/constants/line_spacing = -14
-Label/constants/shadow_offset_x = 2
-Label/constants/shadow_offset_y = 2
-Label/constants/shadow_outline_size = 4
-Label/font_sizes/font_size = 32
-Label/styles/normal = ExtResource("10_cn7d7")
-
 [node name="Node2D" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("1_hhfyu")
+
+[node name="DialogueLabel" type="RichTextLabel" parent="CanvasLayer"]
+offset_left = 87.0
+offset_top = 266.0
+offset_right = 887.0
+offset_bottom = 456.0
+theme = ExtResource("2_8cqcx")
+text = "Bro it is way too wet in this cave..."
+scroll_active = false
+autowrap_mode = 2
 
 [node name="Level0" type="Node2D" parent="."]
 
@@ -75,63 +84,58 @@ visible = false
 position = Vector2(2.08165e-12, 2.08165e-12)
 polygon = PackedVector2Array(-2476, 1558, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -356, 976, -410, 722, -537, 676, -841, 746, -1027, 814, -1412, 738, -1632, 674, -1579, 490, -1186, 504, -754, 593, -593, 325, -578, 108, -295, 131, -76, 58, -624, -135, -1041, 10, -1462, -276, -1011, -530, -560, -274, 233, -397, 618, -430, 1020, -450, 1425, -397, 1674, -346, 1590, -167, 1431, -121, 1059, -251, 706, -80, 299, 186, -166, 417, -549, 503, -342, 547, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -2459, 967)
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-1318, 854)
+zoom = Vector2(3.4, 3.4)
+script = ExtResource("2_ok7kf")
+
 [node name="RoomAreaParent" type="Node2D" parent="."]
 visible = false
 
 [node name="RoomArea1" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-1355, 766)
-scale = Vector2(2, 2)
 collision_mask = 2
+script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea1"]
-position = Vector2(-0.5, 0)
+position = Vector2(36, 91)
 shape = SubResource("RectangleShape2D_so4df")
-
-[node name="Camera2D" type="Camera2D" parent="RoomAreaParent/RoomArea1"]
-zoom = Vector2(3.84, 3.84)
-script = ExtResource("2_ok7kf")
 
 [node name="RoomArea2" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 766)
-scale = Vector2(2, 2)
 collision_mask = 2
+script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea2"]
-position = Vector2(450.25, -181)
+position = Vector2(922.5, -239)
 shape = SubResource("RectangleShape2D_pnb57")
-
-[node name="Camera2D" type="Camera2D" parent="RoomAreaParent/RoomArea2"]
-position = Vector2(449.5, -261.5)
-zoom = Vector2(1.37, 1.37)
-script = ExtResource("2_ok7kf")
 
 [node name="RoomArea3" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 766)
-scale = Vector2(2, 2)
 collision_mask = 2
+script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea3"]
-position = Vector2(2117.38, -366)
+position = Vector2(3301.19, -622.5)
 shape = SubResource("RectangleShape2D_m5d18")
-
-[node name="Camera2D" type="Camera2D" parent="RoomAreaParent/RoomArea3"]
-position = Vector2(2119.5, -402.5)
-zoom = Vector2(0.99, 0.99)
-script = ExtResource("2_ok7kf")
 
 [node name="RoomArea4" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 2846)
-scale = Vector2(2, 2)
 collision_mask = 2
+script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea4"]
-position = Vector2(1804.5, -595.5)
+position = Vector2(3424, -1240)
 shape = SubResource("RectangleShape2D_gwljw")
 
-[node name="Camera2D" type="Camera2D" parent="RoomAreaParent/RoomArea4"]
-position = Vector2(1806.5, -513.5)
-zoom = Vector2(1.43, 1.43)
-script = ExtResource("2_ok7kf")
+[node name="RoomArea5" type="Area2D" parent="RoomAreaParent"]
+position = Vector2(-354, 2846)
+collision_mask = 2
+script = ExtResource("5_fn3gd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea5"]
+position = Vector2(-975.5, -2463.5)
+shape = SubResource("RectangleShape2D_dwcay")
 
 [node name="ReticleController" type="Sprite2D" parent="."]
 position = Vector2(230, 2.1684e-19)
@@ -149,9 +153,11 @@ unique_name_in_owner = true
 script = ExtResource("4_5x65x")
 gravity = 10.0
 grappleGravity = 10.0
+grappleFlyingSpeed = 1000.0
 maxFloorAngle = 1.3
 
 [node name="GrappleLine" type="Line2D" parent="PlayerController"]
+z_index = 1
 points = PackedVector2Array(0, 0, 0, 0)
 width = 3.0
 default_color = Color(0.788235, 0.54902, 0.976471, 1)
@@ -174,8 +180,9 @@ collision_layer = 4
 collision_mask = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerController/Grapple"]
-modulate = Color(0.811765, 0.415686, 1, 1)
+modulate = Color(0.788235, 0.54902, 0.976471, 1)
 position = Vector2(2.08165e-12, 2.08165e-12)
+scale = Vector2(0.74, 1)
 texture = ExtResource("7_mrs78")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerController/Grapple"]
@@ -202,6 +209,7 @@ shape = SubResource("CircleShape2D_nyt3n")
 shape = SubResource("RectangleShape2D_v0lyo")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="PlayerController/PlayerBody"]
+z_index = 2
 scale = Vector2(0.025, 0.025)
 sprite_frames = ExtResource("8_6lftg")
 animation = &"bounce"
@@ -222,30 +230,27 @@ texture = ExtResource("9_ifetg")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="NPC"]
 shape = SubResource("RectangleShape2D_i3c6s")
 
-[node name="Label" type="Label" parent="NPC"]
-z_index = 1
-z_as_relative = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -168.0
-offset_right = 21.0
-offset_bottom = -83.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = SubResource("Theme_v1q06")
+[node name="UpstairsNeighbor" type="Area2D" parent="."]
+position = Vector2(-1086, 516)
+rotation = 0.151374
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("8_gadaa")
+dialogueLine = "hey brog!! hope ur not here bc i was hoppin too much on ur roof"
+
+[node name="Sprite2D" type="Sprite2D" parent="UpstairsNeighbor"]
+self_modulate = Color(0, 1, 0.166667, 1)
+texture = ExtResource("9_ifetg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpstairsNeighbor"]
+shape = SubResource("RectangleShape2D_i3c6s")
 
 [connection signal="mouse_entered" from="Level0/Border/StaticBody2D" to="ReticleController" method="_on_mouse_entered_grapple_area"]
 [connection signal="mouse_exited" from="Level0/Border/StaticBody2D" to="ReticleController" method="_on_mouse_exited_grapple_area"]
-[connection signal="body_entered" from="RoomAreaParent/RoomArea1" to="RoomAreaParent/RoomArea1/Camera2D" method="_on_area_2d_body_entered"]
-[connection signal="body_entered" from="RoomAreaParent/RoomArea2" to="RoomAreaParent/RoomArea2/Camera2D" method="_on_area_2d_body_entered"]
-[connection signal="body_entered" from="RoomAreaParent/RoomArea3" to="RoomAreaParent/RoomArea3/Camera2D" method="_on_area_2d_body_entered"]
-[connection signal="body_entered" from="RoomAreaParent/RoomArea4" to="RoomAreaParent/RoomArea4/Camera2D" method="_on_area_2d_body_entered"]
 [connection signal="clicked_on_grapple_area" from="ReticleController" to="PlayerController" method="_on_reticle_clicked_on_grapple_area"]
 [connection signal="clicked_release_from_grapple_area" from="ReticleController" to="PlayerController" method="_on_clicked_release_from_grapple_area"]
 [connection signal="animation_finished" from="PlayerController/PlayerBody/AnimatedSprite2D" to="PlayerController" method="_on_animation_finished"]
 [connection signal="body_entered" from="NPC" to="NPC" method="_on_body_entered"]
 [connection signal="body_exited" from="NPC" to="NPC" method="_on_body_exited"]
+[connection signal="body_entered" from="UpstairsNeighbor" to="UpstairsNeighbor" method="_on_body_entered"]
+[connection signal="body_exited" from="UpstairsNeighbor" to="UpstairsNeighbor" method="_on_body_exited"]
