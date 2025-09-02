@@ -1,13 +1,32 @@
 extends Camera2D
 
+var initialized = false
+var nextRoomCenter : Vector2
+var nextRoomRect : Rect2
+
 func _ready() -> void:
 	%PlayerController.grappled.connect(on_grappled)
 	SignalBus.room_area_entered.connect(on_room_area_entered)
+	SignalBus.room_area_exited.connect(on_room_area_exited)
 
 func on_room_area_entered(roomCenter : Vector2, roomBounds : Rect2):
-	global_position = roomCenter
-	zoom = Vector2.ONE * minf(get_viewport_rect().size.x / roomBounds.size.x, get_viewport_rect().size.y / roomBounds.size.y)
-	pass
+	nextRoomCenter = roomCenter
+	nextRoomRect = roomBounds
+	
+	if !initialized:
+		initialized = true
+		set_camera_to_next_room()
+
+func on_room_area_exited(roomCenter : Vector2):
+	if(roomCenter == nextRoomCenter):
+		return
+	
+	set_camera_to_next_room()
+
+func set_camera_to_next_room():
+	global_position = nextRoomCenter
+	zoom = Vector2.ONE * minf(get_viewport_rect().size.x / nextRoomRect.size.x, get_viewport_rect().size.y / nextRoomRect.size.y)
+	
 
 func on_grappled() -> void:
 	if is_current():

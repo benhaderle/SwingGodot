@@ -19,7 +19,7 @@ func _ready():
 	process_physics_priority = -1
 
 func _physics_process(delta: float):
-	position = get_viewport().get_camera_2d().get_global_mouse_position()
+	position = get_viewport().get_mouse_position()
 	
 	if overGrappleArea:
 		rotation = rotation + 1 * delta
@@ -27,7 +27,7 @@ func _physics_process(delta: float):
 	if Input.is_action_pressed("Grapple") and !emittedGrapple:
 		scale = Vector2(pressedDownScale, pressedDownScale)
 		if overGrappleArea:
-			emit_signal("clicked_on_grapple_area", global_position)
+			emit_signal("clicked_on_grapple_area", get_viewport().get_camera_2d().get_global_mouse_position())
 			emittedGrapple = true
 	elif !Input.is_action_pressed("Grapple") and emittedGrapple:
 		if overGrappleArea:

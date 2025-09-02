@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://catbl3tltfboe"]
+
+[ext_resource type="Script" path="res://Scripts/NPCController.gd" id="1_dotbm"]
+[ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://Art/icon.svg" id="2_x888o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i3c6s"]
+size = Vector2(300, 300)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_86bpc"]
+cull_mode = 1
+polygon = PackedVector2Array(55.4, -64, -55.5, -64, -57.5, -63, -60.2, -63, -64, -55.4, -64, 56.3, -63, 57.6, -63, 60.1, -56.8, 64, 56.4, 64, 60.6, 61, 62.4, 61, 64, 56.2, 64, -56.4, 63, -57.7, 63, -60.2)
+
+[node name="NPC" type="Area2D"]
+position = Vector2(678, 749)
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_dotbm")
+dialogueLine = "Bro it is way too wet in this cave..."
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+self_modulate = Color(0, 1, 0.166667, 1)
+texture = ExtResource("2_x888o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_i3c6s")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_86bpc")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

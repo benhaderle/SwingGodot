@@ -45,7 +45,9 @@ var lineLength : float
 ## whether or not we are stopped on the ground rn
 var grounded : bool 
 var groundNormal : Vector2
+## the target the grapple is flying towards. can be a Vector2 or Node2D
 var grappleTarget
+var swingPoint : Vector2
 
 func _ready():
 	Utils.disableNode(grapple)
@@ -88,7 +90,8 @@ func _physics_process(delta):
 		if grappleFlying:
 			# enable the collision shape after one frame of movement 
 			grapple.get_node("CollisionShape2D").disabled = false
-				
+	
+	#adding grapple movement if we're grappled	
 	if isGrappled:
 		# add the grapple gravity
 		playerBody.velocity += Vector2(0, grappleGravity) * delta
@@ -145,6 +148,7 @@ func _physics_process(delta):
 		
 		# if our velocity is less than the stop threshold and we're on a floor, stop the player
 		if isGrappled:
+			#TODO: this is currently undefined behavior for when the player is grappled, but hitting something
 			var i = 0
 			#print("collision while grappled")
 		elif playerBody.velocity.length_squared() < stopVelocityThreshold and collision.get_angle() < maxFloorAngle:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://nm0w0yqxo1k3"]
+[gd_scene load_steps=21 format=3 uid="uid://nm0w0yqxo1k3"]
 
 [ext_resource type="Shader" path="res://Shaders/background.gdshader" id="1_2umnk"]
 [ext_resource type="Script" path="res://Scripts/UIController.gd" id="1_hhfyu"]
@@ -6,12 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://dhrmuxmi5xh3m" path="res://Art/reticle.png" id="2_mwa8p"]
 [ext_resource type="Script" path="res://Scripts/CameraController.gd" id="2_ok7kf"]
 [ext_resource type="Script" path="res://Scripts/ReticleController.gd" id="3_7rstr"]
+[ext_resource type="Texture2D" uid="uid://ckfuxnpotqr3f" path="res://Art/2D Lights and Shadows Godot 4.4.webp" id="3_o3ep3"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.gd" id="4_5x65x"]
+[ext_resource type="Script" path="res://Scripts/LevelPolygon.gd" id="4_288rl"]
 [ext_resource type="Script" path="res://Scripts/RoomAreaController.gd" id="5_fn3gd"]
+[ext_resource type="Shape2D" uid="uid://62j6bwm8ceuu" path="res://169rect.tres" id="6_ruafo"]
 [ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="7_mrs78"]
+[ext_resource type="PackedScene" uid="uid://catbl3tltfboe" path="res://Scenes/npc.tscn" id="7_yruwv"]
+[ext_resource type="Texture2D" uid="uid://dk33chuwhm2ux" path="res://Art/pointlighttexture.tres" id="8_5dej1"]
 [ext_resource type="SpriteFrames" uid="uid://bnwcsx30oc8bi" path="res://Art/frogSpriteFrames.tres" id="8_6lftg"]
-[ext_resource type="Script" path="res://Scripts/NPCController.gd" id="8_gadaa"]
-[ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://Art/icon.svg" id="9_ifetg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b32nj"]
 shader = ExtResource("1_2umnk")
@@ -22,20 +25,9 @@ shader_parameter/color4 = Color(0, 0.298039, 0.541176, 1)
 shader_parameter/timeScale = 2.08165e-12
 shader_parameter/resolution = Vector2(300, 200)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_so4df"]
-size = Vector2(1044, 531)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pnb57"]
-size = Vector2(2707, 1192)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_m5d18"]
-size = Vector2(1979.62, 1987)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_gwljw"]
-size = Vector2(1212, 912)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dwcay"]
-size = Vector2(1069, 465)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_tn783"]
+cull_mode = 2
+polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -445, 803, -606, 760, -839, 681, -1010, 767, -1398, 737, -1614, 767, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -82, 54, -655, -57, -1041, 10, -1462, -276, -1011, -530, -537, -171, 233, -397, 618, -430, 1020, -450, 1425, -397, 1674, -346, 1590, -167, 1431, -121, 1059, -251, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fhpe3"]
 radius = 256.0
@@ -46,27 +38,39 @@ radius = 7.15891
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v0lyo"]
 size = Vector2(10, 10)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_i3c6s"]
-size = Vector2(300, 300)
-
 [node name="Node2D" type="Node2D"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("1_hhfyu")
 
 [node name="DialogueLabel" type="RichTextLabel" parent="CanvasLayer"]
-offset_left = 87.0
-offset_top = 266.0
-offset_right = 887.0
-offset_bottom = 456.0
+offset_left = 72.0
+offset_top = 77.0
+offset_right = 113.0
+offset_bottom = 117.0
 theme = ExtResource("2_8cqcx")
 text = "Bro it is way too wet in this cave..."
 scroll_active = false
 autowrap_mode = 2
 
+[node name="ReticleController" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(230, 2.1684e-19)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_mwa8p")
+script = ExtResource("3_7rstr")
+highlightedColor = Color(0.878431, 0.494118, 0.858824, 1)
+normalColor = Color(0.207843, 0.670588, 0.501961, 1)
+highlightedScale = 0.15
+normalScale = 0.1
+pressedDownScale = 0.08
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+position = Vector2(36, -224)
+color = Color(0.3843, 0.576765, 0.63, 1)
+
 [node name="Level0" type="Node2D" parent="."]
 
-[node name="Polygon2D" type="Polygon2D" parent="Level0"]
+[node name="Background" type="Polygon2D" parent="Level0"]
 material = SubResource("ShaderMaterial_b32nj")
 position = Vector2(36, -224)
 polygon = PackedVector2Array(-7827, -5454, -4437, 5154, 14567, 5159, 14439, -5993)
@@ -74,7 +78,8 @@ polygon = PackedVector2Array(-7827, -5454, -4437, 5154, 14567, 5159, 14439, -599
 [node name="Border" type="Polygon2D" parent="Level0"]
 position = Vector2(0, -222)
 color = Color(0.1537, 0.1537, 0.29, 1)
-polygon = PackedVector2Array(-2476, 1558, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -356, 976, -410, 722, -537, 676, -841, 746, -1027, 814, -1412, 738, -1632, 674, -1579, 490, -1186, 504, -754, 593, -593, 325, -578, 108, -295, 131, -76, 58, -624, -135, -1041, 10, -1462, -276, -1011, -530, -560, -274, 233, -397, 618, -430, 1020, -450, 1425, -397, 1674, -346, 1590, -167, 1431, -121, 1059, -251, 706, -80, 299, 186, -166, 417, -549, 503, -342, 547, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -2459, 967)
+polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -445, 803, -606, 760, -839, 681, -1010, 767, -1398, 737, -1614, 767, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -82, 54, -655, -57, -1041, 10, -1462, -276, -1011, -530, -537, -171, 233, -397, 618, -430, 1020, -450, 1425, -397, 1674, -346, 1590, -167, 1431, -121, 1059, -251, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
+script = ExtResource("4_288rl")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Level0/Border"]
 input_pickable = true
@@ -82,7 +87,59 @@ input_pickable = true
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Level0/Border/StaticBody2D"]
 visible = false
 position = Vector2(2.08165e-12, 2.08165e-12)
-polygon = PackedVector2Array(-2476, 1558, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -356, 976, -410, 722, -537, 676, -841, 746, -1027, 814, -1412, 738, -1632, 674, -1579, 490, -1186, 504, -754, 593, -593, 325, -578, 108, -295, 131, -76, 58, -624, -135, -1041, 10, -1462, -276, -1011, -530, -560, -274, 233, -397, 618, -430, 1020, -450, 1425, -397, 1674, -346, 1590, -167, 1431, -121, 1059, -251, 706, -80, 299, 186, -166, 417, -549, 503, -342, 547, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -2459, 967)
+polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -445, 803, -606, 760, -839, 681, -1010, 767, -1398, 737, -1614, 767, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -82, 54, -655, -57, -1041, 10, -1462, -276, -1011, -530, -537, -171, 233, -397, 618, -430, 1020, -450, 1425, -397, 1674, -346, 1590, -167, 1431, -121, 1059, -251, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Level0/Border"]
+occluder = SubResource("OccluderPolygon2D_tn783")
+
+[node name="NPCs" type="Node2D" parent="Level0"]
+
+[node name="NPC" parent="Level0/NPCs" instance=ExtResource("7_yruwv")]
+
+[node name="NPC2" parent="Level0/NPCs" instance=ExtResource("7_yruwv")]
+position = Vector2(-1123, 478)
+rotation = 0.0796554
+dialogueLine = "Yooooo, what makes your roof so bouncy?"
+
+[node name="NPC3" parent="Level0/NPCs" instance=ExtResource("7_yruwv")]
+position = Vector2(-1005, -294)
+rotation = 0.0123069
+dialogueLine = "Grammy always said living on the top floor was the best. She was right!"
+
+[node name="NPC4" parent="Level0/NPCs" instance=ExtResource("7_yruwv")]
+position = Vector2(1434, -419)
+rotation = 0.0123069
+dialogueLine = "Oh! A visitor! I don't have any tea..."
+
+[node name="Lights" type="Node2D" parent="Level0"]
+
+[node name="PointLight2D" type="PointLight2D" parent="Level0/Lights"]
+position = Vector2(185, -308)
+energy = 0.31
+shadow_enabled = true
+texture = ExtResource("8_5dej1")
+texture_scale = 50.0
+
+[node name="PointLight2D2" type="PointLight2D" parent="Level0/Lights"]
+position = Vector2(2473, 271)
+energy = 0.33
+shadow_enabled = true
+texture = ExtResource("8_5dej1")
+texture_scale = 50.0
+
+[node name="PointLight2D3" type="PointLight2D" parent="Level0/Lights"]
+position = Vector2(5121, 307)
+energy = 0.33
+shadow_enabled = true
+texture = ExtResource("8_5dej1")
+texture_scale = 50.0
+
+[node name="PointLight2D4" type="PointLight2D" parent="Level0/Lights"]
+position = Vector2(581, 515)
+energy = 0.33
+shadow_enabled = true
+texture = ExtResource("8_5dej1")
+texture_scale = 18.4
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-1318, 854)
@@ -98,8 +155,9 @@ collision_mask = 2
 script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea1"]
-position = Vector2(36, 91)
-shape = SubResource("RectangleShape2D_so4df")
+position = Vector2(-658, 495)
+scale = Vector2(148.39, 148.39)
+shape = ExtResource("6_ruafo")
 
 [node name="RoomArea2" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 766)
@@ -107,8 +165,9 @@ collision_mask = 2
 script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea2"]
-position = Vector2(922.5, -239)
-shape = SubResource("RectangleShape2D_pnb57")
+position = Vector2(575, -352)
+scale = Vector2(129.47, 129.47)
+shape = ExtResource("6_ruafo")
 
 [node name="RoomArea3" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 766)
@@ -116,8 +175,9 @@ collision_mask = 2
 script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea3"]
-position = Vector2(3301.19, -622.5)
-shape = SubResource("RectangleShape2D_m5d18")
+position = Vector2(2774, -367)
+scale = Vector2(144.03, 144.03)
+shape = ExtResource("6_ruafo")
 
 [node name="RoomArea4" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 2846)
@@ -125,8 +185,9 @@ collision_mask = 2
 script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea4"]
-position = Vector2(3424, -1240)
-shape = SubResource("RectangleShape2D_gwljw")
+position = Vector2(3424, -1329.5)
+scale = Vector2(101.882, 101.882)
+shape = ExtResource("6_ruafo")
 
 [node name="RoomArea5" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-354, 2846)
@@ -134,19 +195,39 @@ collision_mask = 2
 script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea5"]
-position = Vector2(-975.5, -2463.5)
-shape = SubResource("RectangleShape2D_dwcay")
+position = Vector2(-989.25, -2556)
+scale = Vector2(-65.3217, -65.3217)
+shape = ExtResource("6_ruafo")
 
-[node name="ReticleController" type="Sprite2D" parent="."]
-position = Vector2(230, 2.1684e-19)
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("2_mwa8p")
-script = ExtResource("3_7rstr")
-highlightedColor = Color(0.878431, 0.494118, 0.858824, 1)
-normalColor = Color(0.207843, 0.670588, 0.501961, 1)
-highlightedScale = 0.15
-normalScale = 0.1
-pressedDownScale = 0.08
+[node name="RoomArea6" type="Area2D" parent="RoomAreaParent"]
+position = Vector2(-350, 1998)
+collision_mask = 2
+script = ExtResource("5_fn3gd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea6"]
+position = Vector2(-794, -2527)
+scale = Vector2(-75.2805, -75.2805)
+shape = ExtResource("6_ruafo")
+
+[node name="RoomArea7" type="Area2D" parent="RoomAreaParent"]
+position = Vector2(-350, 1998)
+collision_mask = 2
+script = ExtResource("5_fn3gd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea7"]
+position = Vector2(612, -2618)
+scale = Vector2(-98.8415, -98.8415)
+shape = ExtResource("6_ruafo")
+
+[node name="RoomArea8" type="Area2D" parent="RoomAreaParent"]
+position = Vector2(-350, 1998)
+collision_mask = 2
+script = ExtResource("5_fn3gd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea8"]
+position = Vector2(1873, -2572)
+scale = Vector2(-57.4454, -57.4454)
+shape = ExtResource("6_ruafo")
 
 [node name="PlayerController" type="Node" parent="."]
 unique_name_in_owner = true
@@ -157,6 +238,7 @@ grappleFlyingSpeed = 1000.0
 maxFloorAngle = 1.3
 
 [node name="GrappleLine" type="Line2D" parent="PlayerController"]
+light_mask = 3
 z_index = 1
 points = PackedVector2Array(0, 0, 0, 0)
 width = 3.0
@@ -181,6 +263,7 @@ collision_mask = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerController/Grapple"]
 modulate = Color(0.788235, 0.54902, 0.976471, 1)
+light_mask = 3
 position = Vector2(2.08165e-12, 2.08165e-12)
 scale = Vector2(0.74, 1)
 texture = ExtResource("7_mrs78")
@@ -195,14 +278,8 @@ collision_layer = 2
 collision_mask = 5
 slide_on_ceiling = false
 
-[node name="Sprite2D" type="Sprite2D" parent="PlayerController/PlayerBody"]
-visible = false
-position = Vector2(2.08165e-12, 2.08165e-12)
-scale = Vector2(0.15625, 0.15625)
-texture = ExtResource("9_ifetg")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerController/PlayerBody"]
-position = Vector2(0, -2.97)
+position = Vector2(0, -0.499999)
 shape = SubResource("CircleShape2D_nyt3n")
 
 [node name="GroundCast" type="ShapeCast2D" parent="PlayerController/PlayerBody"]
@@ -210,47 +287,22 @@ shape = SubResource("RectangleShape2D_v0lyo")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="PlayerController/PlayerBody"]
 z_index = 2
-scale = Vector2(0.025, 0.025)
+scale = Vector2(0.04, 0.04)
 sprite_frames = ExtResource("8_6lftg")
 animation = &"bounce"
 autoplay = "idle"
 speed_scale = 3.0
 
-[node name="NPC" type="Area2D" parent="."]
-position = Vector2(678, 749)
-collision_layer = 4
-collision_mask = 2
-script = ExtResource("8_gadaa")
-dialogueLine = "Bro it is way too wet in this cave..."
+[node name="PointLight2D" type="PointLight2D" parent="PlayerController/PlayerBody"]
+scale = Vector2(0.5, 0.5)
+energy = 0.3
+shadow_enabled = true
+shadow_item_cull_mask = 2
+texture = ExtResource("3_o3ep3")
+texture_scale = 2.31
 
-[node name="Sprite2D" type="Sprite2D" parent="NPC"]
-self_modulate = Color(0, 1, 0.166667, 1)
-texture = ExtResource("9_ifetg")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="NPC"]
-shape = SubResource("RectangleShape2D_i3c6s")
-
-[node name="UpstairsNeighbor" type="Area2D" parent="."]
-position = Vector2(-1086, 516)
-rotation = 0.151374
-collision_layer = 4
-collision_mask = 2
-script = ExtResource("8_gadaa")
-dialogueLine = "hey brog!! hope ur not here bc i was hoppin too much on ur roof"
-
-[node name="Sprite2D" type="Sprite2D" parent="UpstairsNeighbor"]
-self_modulate = Color(0, 1, 0.166667, 1)
-texture = ExtResource("9_ifetg")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="UpstairsNeighbor"]
-shape = SubResource("RectangleShape2D_i3c6s")
-
-[connection signal="mouse_entered" from="Level0/Border/StaticBody2D" to="ReticleController" method="_on_mouse_entered_grapple_area"]
-[connection signal="mouse_exited" from="Level0/Border/StaticBody2D" to="ReticleController" method="_on_mouse_exited_grapple_area"]
-[connection signal="clicked_on_grapple_area" from="ReticleController" to="PlayerController" method="_on_reticle_clicked_on_grapple_area"]
-[connection signal="clicked_release_from_grapple_area" from="ReticleController" to="PlayerController" method="_on_clicked_release_from_grapple_area"]
+[connection signal="clicked_on_grapple_area" from="CanvasLayer/ReticleController" to="PlayerController" method="_on_reticle_clicked_on_grapple_area"]
+[connection signal="clicked_release_from_grapple_area" from="CanvasLayer/ReticleController" to="PlayerController" method="_on_clicked_release_from_grapple_area"]
+[connection signal="mouse_entered" from="Level0/Border/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_entered_grapple_area"]
+[connection signal="mouse_exited" from="Level0/Border/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_exited_grapple_area"]
 [connection signal="animation_finished" from="PlayerController/PlayerBody/AnimatedSprite2D" to="PlayerController" method="_on_animation_finished"]
-[connection signal="body_entered" from="NPC" to="NPC" method="_on_body_entered"]
-[connection signal="body_exited" from="NPC" to="NPC" method="_on_body_exited"]
-[connection signal="body_entered" from="UpstairsNeighbor" to="UpstairsNeighbor" method="_on_body_entered"]
-[connection signal="body_exited" from="UpstairsNeighbor" to="UpstairsNeighbor" method="_on_body_exited"]
