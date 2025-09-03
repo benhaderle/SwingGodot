@@ -69,6 +69,7 @@ func _physics_process(delta):
 		# move the grapple and record any collision
 		var collision : KinematicCollision2D = grapple.move_and_collide(grappleFlyingSpeed * direction * delta)
 		
+		# get rid of a point if we're near it
 		if grapplePoints.size() > 0 and (grapplePoints[-1] - grapple.position).length() < grappleFlyingSpeed * delta * .5:
 			grapplePoints.pop_back()
 		
@@ -95,9 +96,9 @@ func _physics_process(delta):
 			# enable the collision shape after one frame of movement 
 			grapple.get_node("CollisionShape2D").disabled = false
 	
-	#adding grapple movement if we're grappled	
+	# adding grapple movement if we're grappled	
 	if isGrappled:
-		#first we see if need to add any new swing points
+		# first we see if need to add+remove any new swing points
 		var space_state = get_world_2d().direct_space_state
 		
 		# loop through our grapplePoints and see if there are any that can be gotten rid of

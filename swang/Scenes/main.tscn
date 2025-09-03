@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://nm0w0yqxo1k3"]
+[gd_scene load_steps=23 format=3 uid="uid://nm0w0yqxo1k3"]
 
 [ext_resource type="Shader" path="res://Shaders/background.gdshader" id="1_2umnk"]
 [ext_resource type="Script" path="res://Scripts/UIController.gd" id="1_hhfyu"]
@@ -39,7 +39,11 @@ shader_parameter/resolution = Vector2(300, 200)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_tn783"]
 cull_mode = 2
-polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1228, 896, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -291, 857, -445, 803, -606, 760, -809, 693, -862.098, 692.617, -1010, 767, -1398, 737, -1614, 767, -1785, 645, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -84, 74, -82, 54, -655, -57, -713, -54, -1016, 7, -1173, 4, -1476, -207, -1462, -276, -1078, -533, -1011, -530, -537, -171, -465, -168, 233, -397, 618, -430, 1020, -450, 1425, -397, 1646, -384, 1674, -346, 1590, -167, 1502, -124, 1386, -127, 1111, -240, 1035, -240, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -400, 431, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
+polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 4063, 1076, 3639, 1268, 3371, 1431, 3172, 1499, 3152, 1538, 3266, 1578, 3354, 1552, 3494, 1773, 3389, 1862, 3415, 2089, 3386, 2121, 2898, 2165, 2539, 1873, 2547, 1818, 2870, 1729, 3079, 1788, 3144, 1704, 3082, 1658, 2987, 1626, 2914, 1148, 2851, 1112, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1228, 896, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -291, 857, -445, 803, -606, 760, -809, 693, -862.098, 692.617, -1010, 767, -1398, 737, -1614, 767, -1785, 645, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -84, 74, -82, 54, -655, -57, -713, -54, -1016, 7, -1173, 4, -1476, -207, -1462, -276, -1078, -533, -1011, -530, -537, -171, -465, -168, 233, -397, 618, -430, 1020, -450, 1425, -397, 1646, -384, 1674, -346, 1590, -167, 1502, -124, 1386, -127, 1111, -240, 1035, -240, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -400, 431, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 2055, 262, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_om0rq"]
+cull_mode = 2
+polygon = PackedVector2Array(180, 41, 415, 17, 444, 85, 183, 246, -19, 289, -47, 265, -7, 145, -75, 62, -69, 42, 9, 20)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fhpe3"]
 radius = 256.0
@@ -86,26 +90,64 @@ environment = SubResource("Environment_susy2")
 [node name="Level0" type="Node2D" parent="."]
 
 [node name="Background" type="Polygon2D" parent="Level0"]
+z_index = -1000
 material = SubResource("ShaderMaterial_b32nj")
 position = Vector2(36, -224)
 polygon = PackedVector2Array(-7827, -5454, -4437, 5154, 14567, 5159, 14439, -5993)
 
-[node name="Border" type="Polygon2D" parent="Level0"]
-position = Vector2(0, -222)
+[node name="LevelGeometry" type="Node2D" parent="Level0"]
+
+[node name="Border" type="Polygon2D" parent="Level0/LevelGeometry"]
+position = Vector2(16, -217)
 color = Color(0.1537, 0.1537, 0.29, 1)
-polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1228, 896, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -291, 857, -445, 803, -606, 760, -809, 693, -862.098, 692.617, -1010, 767, -1398, 737, -1614, 767, -1785, 645, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -84, 74, -82, 54, -655, -57, -713, -54, -1016, 7, -1173, 4, -1476, -207, -1462, -276, -1078, -533, -1011, -530, -537, -171, -465, -168, 233, -397, 618, -430, 1020, -450, 1425, -397, 1646, -384, 1674, -346, 1590, -167, 1502, -124, 1386, -127, 1111, -240, 1035, -240, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -400, 431, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
+polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 4063, 1076, 3639, 1268, 3371, 1431, 3172, 1499, 3152, 1538, 3266, 1578, 3354, 1552, 3494, 1773, 3389, 1862, 3415, 2089, 3386, 2121, 2898, 2165, 2539, 1873, 2547, 1818, 2870, 1729, 3079, 1788, 3144, 1704, 3082, 1658, 2987, 1626, 2914, 1148, 2851, 1112, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1228, 896, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -291, 857, -445, 803, -606, 760, -809, 693, -862.098, 692.617, -1010, 767, -1398, 737, -1614, 767, -1785, 645, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -84, 74, -82, 54, -655, -57, -713, -54, -1016, 7, -1173, 4, -1476, -207, -1462, -276, -1078, -533, -1011, -530, -537, -171, -465, -168, 233, -397, 618, -430, 1020, -450, 1425, -397, 1646, -384, 1674, -346, 1590, -167, 1502, -124, 1386, -127, 1111, -240, 1035, -240, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -400, 431, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 2055, 262, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
 script = ExtResource("4_288rl")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Level0/Border"]
+[node name="StaticBody2D" type="StaticBody2D" parent="Level0/LevelGeometry/Border"]
 input_pickable = true
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Level0/Border/StaticBody2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Level0/LevelGeometry/Border/StaticBody2D"]
 visible = false
 position = Vector2(2.08165e-12, 2.08165e-12)
-polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 3913, 970, 3257, 1080, 3494, 1773, 3389, 1862, 3386, 2121, 2898, 2165, 2547, 1818, 3116, 1718, 3141, 1612, 3074, 1499, 3001, 1491, 2891, 1114, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1228, 896, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -291, 857, -445, 803, -606, 760, -809, 693, -862.098, 692.617, -1010, 767, -1398, 737, -1614, 767, -1785, 645, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -84, 74, -82, 54, -655, -57, -713, -54, -1016, 7, -1173, 4, -1476, -207, -1462, -276, -1078, -533, -1011, -530, -537, -171, -465, -168, 233, -397, 618, -430, 1020, -450, 1425, -397, 1646, -384, 1674, -346, 1590, -167, 1502, -124, 1386, -127, 1111, -240, 1035, -240, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -400, 431, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 1948, 301, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
+polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 4063, 1076, 3639, 1268, 3371, 1431, 3172, 1499, 3152, 1538, 3266, 1578, 3354, 1552, 3494, 1773, 3389, 1862, 3415, 2089, 3386, 2121, 2898, 2165, 2539, 1873, 2547, 1818, 2870, 1729, 3079, 1788, 3144, 1704, 3082, 1658, 2987, 1626, 2914, 1148, 2851, 1112, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1228, 896, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -291, 857, -445, 803, -606, 760, -809, 693, -862.098, 692.617, -1010, 767, -1398, 737, -1614, 767, -1785, 645, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -84, 74, -82, 54, -655, -57, -713, -54, -1016, 7, -1173, 4, -1476, -207, -1462, -276, -1078, -533, -1011, -530, -537, -171, -465, -168, 233, -397, 618, -430, 1020, -450, 1425, -397, 1646, -384, 1674, -346, 1590, -167, 1502, -124, 1386, -127, 1111, -240, 1035, -240, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -400, 431, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 2055, 262, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="Level0/Border"]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Level0/LevelGeometry/Border"]
 occluder = SubResource("OccluderPolygon2D_tn783")
+
+[node name="Rock1" type="Polygon2D" parent="Level0/LevelGeometry"]
+position = Vector2(3193, 841)
+color = Color(0.1537, 0.1537, 0.29, 1)
+antialiased = true
+polygon = PackedVector2Array(180, 41, 415, 17, 444, 85, 183, 246, -19, 289, -47, 265, -7, 145, -75, 62, -69, 42, 9, 20)
+script = ExtResource("4_288rl")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Level0/LevelGeometry/Rock1"]
+input_pickable = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Level0/LevelGeometry/Rock1/StaticBody2D"]
+visible = false
+position = Vector2(2.08165e-12, 2.08165e-12)
+polygon = PackedVector2Array(180, 41, 415, 17, 444, 85, 183, 246, -19, 289, -47, 265, -7, 145, -75, 62, -69, 42, 9, 20)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Level0/LevelGeometry/Rock1"]
+occluder = SubResource("OccluderPolygon2D_om0rq")
+
+[node name="FalseWall" type="Polygon2D" parent="Level0/LevelGeometry"]
+z_index = 10
+position = Vector2(-1718, 335)
+color = Color(0.1537, 0.1537, 0.29, 1)
+polygon = PackedVector2Array(29, 166, -87, 143, -91, 19, 29, -25)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Level0/LevelGeometry/FalseWall"]
+collision_layer = 8
+input_pickable = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Level0/LevelGeometry/FalseWall/StaticBody2D"]
+visible = false
+position = Vector2(2.08165e-12, 2.08165e-12)
+polygon = PackedVector2Array(29, 166, -87, 143, -91, 19, 29, -25)
+
+[node name="Polygon2D" type="Polygon2D" parent="Level0/LevelGeometry"]
 
 [node name="NPCs" type="Node2D" parent="Level0"]
 
@@ -125,6 +167,11 @@ dialogueLine = "Grammy always said living on the top floor was the best. She was
 position = Vector2(1434, -419)
 rotation = 0.0123069
 dialogueLine = "Oh! A visitor! I don't have any tea..."
+
+[node name="NPC5" parent="Level0/NPCs" instance=ExtResource("7_yruwv")]
+position = Vector2(2951, 1867)
+rotation = 0.0123069
+dialogueLine = "This is really not a place you wanna be."
 
 [node name="Lights" type="Node2D" parent="Level0"]
 
@@ -247,9 +294,9 @@ shape = ExtResource("6_ruafo")
 [node name="PlayerController" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_5x65x")
+airLateralAcceleration = 3.0
 gravity = 10.0
 grappleGravity = 10.0
-grappleFlyingSpeed = 500.0
 maxFloorAngle = 1.3
 
 [node name="GrappleLine" type="Line2D" parent="PlayerController"]
@@ -260,6 +307,7 @@ width = 3.0
 default_color = Color(0.909767, 0.5586, 0.98, 1)
 
 [node name="TrailLine" type="Line2D" parent="PlayerController"]
+z_index = -1
 position = Vector2(2.08165e-12, 2.08165e-12)
 default_color = Color(0.2989, 0.61, 0.501115, 0.243137)
 joint_mode = 2
@@ -287,7 +335,7 @@ texture = ExtResource("7_mrs78")
 shape = SubResource("CircleShape2D_fhpe3")
 
 [node name="PlayerBody" type="CharacterBody2D" parent="PlayerController"]
-position = Vector2(-1319, 928)
+position = Vector2(-439, 390)
 scale = Vector2(2, 2)
 collision_layer = 2
 collision_mask = 5
@@ -320,5 +368,7 @@ texture_scale = 2.31
 
 [connection signal="clicked_on_grapple_area" from="CanvasLayer/ReticleController" to="PlayerController" method="_on_reticle_clicked_on_grapple_area"]
 [connection signal="clicked_release_from_grapple_area" from="CanvasLayer/ReticleController" to="PlayerController" method="_on_clicked_release_from_grapple_area"]
-[connection signal="mouse_entered" from="Level0/Border/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_entered_grapple_area"]
-[connection signal="mouse_exited" from="Level0/Border/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_exited_grapple_area"]
+[connection signal="mouse_entered" from="Level0/LevelGeometry/Border/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_entered_grapple_area"]
+[connection signal="mouse_exited" from="Level0/LevelGeometry/Border/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_exited_grapple_area"]
+[connection signal="mouse_entered" from="Level0/LevelGeometry/Rock1/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_entered_grapple_area"]
+[connection signal="mouse_exited" from="Level0/LevelGeometry/Rock1/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_exited_grapple_area"]
