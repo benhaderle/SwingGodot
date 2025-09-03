@@ -29,36 +29,38 @@ signal grappled
 ## the minimum line length
 @export var minLineLength : float = 200
 ## how fast the grapple extends or retracts from a grapple point
-@export var grappleFlyingSpeed : float = 5000
+@export var grappleFlyingSpeed : float = 1000
 ## the bounciness of the player when hitting a wall
 @export var bounceFactor : float = .5
-## the threshold of velocity squared at which the player will stop moving if grounded
+## the threshold of velocity squared at which the player will stop moving if isGrounded
 @export var stopVelocityThreshold : float = 10
 ## the maximum angle counted as a floor in radians 
 @export var maxFloorAngle : float = .8
 ## whether or not we are currently grappled
 var isGrappled : bool
 ## whether or not the grapple is currently flying towards a target
-var grappleFlying : bool
+var isGrappleFlying : bool
 ## how long the grapple line length is
 var lineLength : float
 ## whether or not we are stopped on the ground rn
-var grounded : bool 
+var isGrounded : bool 
 var groundNormal : Vector2
 ## the target the grapple is flying towards. can be a Vector2 or Node2D
 var grappleTarget
-var swingPoints : Array[Vector2]
+var grapplePoints : Array[Vector2]
 
 func _ready():
 	Utils.disableNode(grapple)
 	process_physics_priority = 10
 
 func _physics_process(delta):
-	if grappleFlying:
+	if isGrappleFlying:
 		# getting the direction to fly in is different depending on what target we were given
 		var direction : Vector2
 		# if the given target is a position vector
-		if grappleTarget is Vector2:
+		if grapplePoints.size() > 0:
+			direction = (grapplePoints[-1] - grapple.position).normalized()
+		elif grappleTarget is Vector2:
 			direction = (grappleTarget - grapple.position).normalized()
 		# if the given target is another node
 		elif grappleTarget is Node2D:
@@ -67,27 +69,29 @@ func _physics_process(delta):
 		# move the grapple and record any collision
 		var collision : KinematicCollision2D = grapple.move_and_collide(grappleFlyingSpeed * direction * delta)
 		
+		if grapplePoints.size() > 0 and (grapplePoints[-1] - grapple.position).length() < grappleFlyingSpeed * delta * .5:
+			grapplePoints.pop_back()
+		
 		# if there was a collision, it's time to do some stuff
 		if collision != null:
-			
 			var collider : CollisionObject2D = collision.get_collider()
 			# layer 2 is the player layer
 			if collider.get_collision_layer_value(2):
-				grappleFlying = false
+				isGrappleFlying = false
 				grapple.position = collision.get_position()
 				Utils.disableNode(grapple)
 				sprite.stop()
-				swingPoints.clear()
+				grapplePoints.clear()
 			# layer 1 is any grapple-able surface
 			elif collider.get_collision_layer_value(1) and Input.is_action_pressed("Grapple"):
-				grappleFlying = false
+				isGrappleFlying = false
 				grapple.position = collision.get_position()
 				# set up everything to be free flying
 				isGrappled = true
 				lineLength = (playerBody.position - grapple.position).length()
 				on_grappled()
 		
-		if grappleFlying:
+		if isGrappleFlying:
 			# enable the collision shape after one frame of movement 
 			grapple.get_node("CollisionShape2D").disabled = false
 	
@@ -96,15 +100,15 @@ func _physics_process(delta):
 		#first we see if need to add any new swing points
 		var space_state = get_world_2d().direct_space_state
 		
-		# loop through our swingPoints and see if there are any that can be gotten rid of
+		# loop through our grapplePoints and see if there are any that can be gotten rid of
 		# once we do find one, we break the loop, so this only gets rid of one per frame
-		for i in range(swingPoints.size() - 1):
-			var from = swingPoints[i + 1]
+		for i in range(grapplePoints.size() - 1):
+			var from = grapplePoints[i + 1]
 			var to : Vector2
 			if i == 0:
 				to = playerBody.position
 			else:
-				to = swingPoints[i - 1]
+				to = grapplePoints[i - 1]
 			
 			#get an epsilon to cushion our raycast a bit
 			var epsilon = (to - from).normalized() * 20
@@ -113,19 +117,19 @@ func _physics_process(delta):
 			var result = space_state.intersect_ray(query)
 			#if we didn't hit anything, the path is clear and a point can be removed
 			if !result:
-				swingPoints.remove_at(i)
+				grapplePoints.remove_at(i)
 				break
 		
 		# right now this only checks to see if we should add a new point between the first swing point and the player.
 		# checking between every pair makes the list grow infinitely long
 		# we could probably fix that but there's no situation where it's relevant til we have movable platforms
 		for i in range(1):
-			var from = swingPoints[i]
+			var from = grapplePoints[i]
 			var to : Vector2
 			if i == 0:
 				to = playerBody.position
 			else:
-				to = swingPoints[i - 1]
+				to = grapplePoints[i - 1]
 			
 			#get an epsilon to cushion our raycast a bit
 			var epsilon = (to - from).normalized() * 20
@@ -134,12 +138,12 @@ func _physics_process(delta):
 			var result = space_state.intersect_ray(query)
 			#if we hit something add a point
 			if result:
-				swingPoints.push_front(result.position)
+				grapplePoints.push_front(result.position)
 		
 		# add the grapple gravity
 		playerBody.velocity += Vector2(0, grappleGravity) * delta
 		
-		var grappleToPlayer : Vector2 = (swingPoints[0] - playerBody.position)
+		var grappleToPlayer : Vector2 = (grapplePoints[0] - playerBody.position)
 		var normalizedGrappleToPlayer = grappleToPlayer.normalized()
 		var currentLineLength = getCurrentLineLength()
 		
@@ -173,8 +177,8 @@ func _physics_process(delta):
 			addAirMovement(delta)
 	# if we're not grappled
 	else:
-		# if we're grounded, we can do ground movement
-		if grounded:
+		# if we're isGrounded, we can do ground movement
+		if isGrounded:
 			if not Input.is_action_pressed("Down"):
 				# if we're only pressing one of the lateral buttons, initiate a lateral jump
 				if Input.is_action_pressed("Right") and not Input.is_action_pressed("Left"):
@@ -188,7 +192,7 @@ func _physics_process(delta):
 			addAirMovement(delta)
 	
 	var collision = playerBody.move_and_collide(playerBody.velocity)
-	# handle the bounce off walls and grounded-ness
+	# handle the bounce off walls and isGrounded-ness
 	if collision:
 		# TODO: make the bounceFactor dependent on the surface we're bouncing on
 		playerBody.velocity = playerBody.velocity.bounce(collision.get_normal()) * bounceFactor
@@ -201,16 +205,16 @@ func _physics_process(delta):
 			#print("collision while grappled")
 		elif playerBody.velocity.length_squared() < stopVelocityThreshold and collision.get_angle() < maxFloorAngle:
 			playerBody.velocity = Vector2(0, 0)
-			grounded = true
+			isGrounded = true
 			sprite.play("landing")
 		else:
-			grounded = false
+			isGrounded = false
 			sprite.play("bounce")
-	# if there was no collision, but we're currently grounded, check to make sure we're still grounded
-	elif grounded:
+	# if there was no collision, but we're currently isGrounded, check to make sure we're still isGrounded
+	elif isGrounded:
 		groundCast.force_shapecast_update()
 		if !groundCast.collision_result:
-			grounded = false
+			isGrounded = false
 
 func addAirMovement(delta):
 	if Input.is_action_pressed("Down"):
@@ -231,10 +235,12 @@ func _process(delta):
 		# update the points
 		var linePoints = [playerBody.position]
 		
-		if grappleFlying:
+		if grapplePoints.size() > 0:
+			linePoints.append_array(grapplePoints)
+			
+		if isGrappleFlying:
 			linePoints.append(grapple.position)
-		else:
-			linePoints.append_array(swingPoints)
+		
 				
 		grappleLine.points = linePoints
 	else:
@@ -245,11 +251,11 @@ func _process(delta):
 	
 	# setting sprite rotation
 	var targetRotation = lerp_angle(sprite.rotation, Vector2.UP.angle_to(-playerBody.velocity), 2 * delta)
-	if grappleFlying:
+	if isGrappleFlying:
 		targetRotation = Vector2.UP.angle_to(grapple.position - playerBody.position)
 	elif isGrappled:
-		targetRotation = Vector2.UP.angle_to(swingPoints[0] - playerBody.position)
-	elif grounded:
+		targetRotation = Vector2.UP.angle_to(grapplePoints[0] - playerBody.position)
+	elif isGrounded:
 		targetRotation = Vector2.UP.angle_to(groundNormal)
 	elif groundCast.is_colliding():
 		targetRotation = lerp_angle(sprite.rotation, Vector2.UP.angle_to(groundCast.collision_result[0].normal), 2 * delta)
@@ -257,11 +263,11 @@ func _process(delta):
 	sprite.rotation = targetRotation
 	
 	if !sprite.is_playing():
-		if grappleFlying:
+		if isGrappleFlying:
 			sprite.play("grappleFlying")
 		elif isGrappled:
 			sprite.play("grappledLoop")
-		elif grounded:
+		elif isGrounded:
 			sprite.play("idle")
 		else:
 			if playerBody.velocity.y < -1:
@@ -275,10 +281,10 @@ func _process(delta):
 		sprite.flip_h = playerBody.velocity.x < 0
 
 func getCurrentLineLength() -> int:
-	var len = (playerBody.position - swingPoints[-1]).length()
+	var len = (playerBody.position - grapplePoints[-1]).length()
 	
-	for i in range(swingPoints.size() - 1):
-		len += (swingPoints[i] - swingPoints[i+1]).length()
+	for i in range(grapplePoints.size() - 1):
+		len += (grapplePoints[i] - grapplePoints[i+1]).length()
 	
 	return len
 
@@ -287,9 +293,10 @@ func _on_clicked_release_from_grapple_area():
 	sprite.play("grappleFlying")
 	
 	isGrappled = false
-	grappleFlying = true
+	isGrappleFlying = true
 	Utils.enableNode(grapple)
 	grappleTarget = playerBody
+	grapplePoints.pop_back()
 	grapple.get_node("CollisionShape2D").disabled = true
 	grapple.collision_mask = 2
 
@@ -297,7 +304,7 @@ func _on_clicked_release_from_grapple_area():
 func _on_reticle_clicked_on_grapple_area(clickPosition):
 	sprite.play("grappleLaunch")
 	
-	grappleFlying = true
+	isGrappleFlying = true
 	Utils.enableNode(grapple)
 	grapple.position = playerBody.position
 	grappleTarget = clickPosition
@@ -305,7 +312,7 @@ func _on_reticle_clicked_on_grapple_area(clickPosition):
 	grapple.collision_mask = 1
 
 func on_grappled():
-	swingPoints.push_front(grapple.position)
+	grapplePoints.push_front(grapple.position)
 	
 	# wait for the line renderer to catch up
 	await get_tree().physics_frame
@@ -316,7 +323,7 @@ func on_grappled():
 	
 	
 	grappled.emit()
-	grounded = false
+	isGrounded = false
 	
 	sprite.play("grappledStart")
 	
