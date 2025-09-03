@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 signal grappled
 
@@ -47,14 +47,13 @@ var grounded : bool
 var groundNormal : Vector2
 ## the target the grapple is flying towards. can be a Vector2 or Node2D
 var grappleTarget
-var swingPoint : Vector2
+var swingPoints : Array[Vector2]
 
 func _ready():
 	Utils.disableNode(grapple)
 	process_physics_priority = 10
 
 func _physics_process(delta):
-	debugLine.points[0] = playerBody.position
 	if grappleFlying:
 		# getting the direction to fly in is different depending on what target we were given
 		var direction : Vector2
@@ -78,6 +77,7 @@ func _physics_process(delta):
 				grapple.position = collision.get_position()
 				Utils.disableNode(grapple)
 				sprite.stop()
+				swingPoints.clear()
 			# layer 1 is any grapple-able surface
 			elif collider.get_collision_layer_value(1) and Input.is_action_pressed("Grapple"):
 				grappleFlying = false
@@ -93,14 +93,62 @@ func _physics_process(delta):
 	
 	#adding grapple movement if we're grappled	
 	if isGrappled:
+		#first we see if need to add any new swing points
+		var space_state = get_world_2d().direct_space_state
+		
+		# loop through our swingPoints and see if there are any that can be gotten rid of
+		# once we do find one, we break the loop, so this only gets rid of one per frame
+		for i in range(swingPoints.size() - 1):
+			var from = swingPoints[i + 1]
+			var to : Vector2
+			if i == 0:
+				to = playerBody.position
+			else:
+				to = swingPoints[i - 1]
+			
+			#get an epsilon to cushion our raycast a bit
+			var epsilon = (to - from).normalized() * 20
+			var query = PhysicsRayQueryParameters2D.create(to, from + epsilon, 1)
+			query.hit_from_inside = true
+			var result = space_state.intersect_ray(query)
+			#if we didn't hit anything, the path is clear and a point can be removed
+			if !result:
+				swingPoints.remove_at(i)
+				break
+		
+		# right now this only checks to see if we should add a new point between the first swing point and the player.
+		# checking between every pair makes the list grow infinitely long
+		# we could probably fix that but there's no situation where it's relevant til we have movable platforms
+		for i in range(1):
+			var from = swingPoints[i]
+			var to : Vector2
+			if i == 0:
+				to = playerBody.position
+			else:
+				to = swingPoints[i - 1]
+			
+			#get an epsilon to cushion our raycast a bit
+			var epsilon = (to - from).normalized() * 20
+			var query = PhysicsRayQueryParameters2D.create(to, from + epsilon, 1)
+			query.hit_from_inside = true
+			var result = space_state.intersect_ray(query)
+			#if we hit something add a point
+			if result:
+				swingPoints.push_front(result.position)
+		
 		# add the grapple gravity
 		playerBody.velocity += Vector2(0, grappleGravity) * delta
 		
-		var grappleToPlayer : Vector2 = (grapple.position - playerBody.position)
+		var grappleToPlayer : Vector2 = (swingPoints[0] - playerBody.position)
 		var normalizedGrappleToPlayer = grappleToPlayer.normalized()
+		var currentLineLength = getCurrentLineLength()
+		
+		# shorten the line
+		lineLength -= shortenSpeed * delta
+		lineLength = clampf(lineLength, minLineLength, INF)
 		
 		# if the player is further from the grapple point than the line is long (ie they need to be pulled back in)
-		if grappleToPlayer.length() >= lineLength:
+		if currentLineLength >= lineLength:
 			# the clockwise direction around the grapple point
 			var cw = Vector2(-normalizedGrappleToPlayer.y, normalizedGrappleToPlayer.x)
 			# the counter clockwise direction around the velocity
@@ -118,7 +166,7 @@ func _physics_process(delta):
 			playerBody.velocity = playerBody.velocity.length() * lerp(playerBody.velocity.normalized(), desiredDirection.normalized(), delta)
 			
 			# how far the player is from being in the place they should be
-			var distToLineLength = (grappleToPlayer.length() - lineLength)
+			var distToLineLength = (currentLineLength - lineLength)
 			# pull the player towards the grapple point with strength exponentially relative to the how far from the line length they are
 			playerBody.velocity += distToLineLength * distToLineLength * springConstant * normalizedGrappleToPlayer * delta
 		else:
@@ -179,14 +227,16 @@ func _process(delta):
 	if grapple.process_mode != PROCESS_MODE_DISABLED:
 		# make sure the line node is enabled
 		Utils.enableNode(grappleLine)
-		
-		# shorten the line
-		lineLength -= shortenSpeed * delta
-		lineLength = clampf(lineLength, minLineLength, INF)
 			
 		# update the points
-		grappleLine.points[0] = playerBody.position
-		grappleLine.points[1] = grapple.position
+		var linePoints = [playerBody.position]
+		
+		if grappleFlying:
+			linePoints.append(grapple.position)
+		else:
+			linePoints.append_array(swingPoints)
+				
+		grappleLine.points = linePoints
 	else:
 		Utils.disableNode(grappleLine)
 	
@@ -195,8 +245,10 @@ func _process(delta):
 	
 	# setting sprite rotation
 	var targetRotation = lerp_angle(sprite.rotation, Vector2.UP.angle_to(-playerBody.velocity), 2 * delta)
-	if isGrappled || grappleFlying:
+	if grappleFlying:
 		targetRotation = Vector2.UP.angle_to(grapple.position - playerBody.position)
+	elif isGrappled:
+		targetRotation = Vector2.UP.angle_to(swingPoints[0] - playerBody.position)
 	elif grounded:
 		targetRotation = Vector2.UP.angle_to(groundNormal)
 	elif groundCast.is_colliding():
@@ -221,7 +273,14 @@ func _process(delta):
 	
 	if abs(playerBody.velocity.x) > 0:
 		sprite.flip_h = playerBody.velocity.x < 0
+
+func getCurrentLineLength() -> int:
+	var len = (playerBody.position - swingPoints[-1]).length()
 	
+	for i in range(swingPoints.size() - 1):
+		len += (swingPoints[i] - swingPoints[i+1]).length()
+	
+	return len
 
 # if we're no longer holding the grapple input, move the grapple back to the player
 func _on_clicked_release_from_grapple_area():
@@ -246,12 +305,15 @@ func _on_reticle_clicked_on_grapple_area(clickPosition):
 	grapple.collision_mask = 1
 
 func on_grappled():
+	swingPoints.push_front(grapple.position)
+	
 	# wait for the line renderer to catch up
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	
 	if !isGrappled:
 		return
+	
 	
 	grappled.emit()
 	grounded = false
