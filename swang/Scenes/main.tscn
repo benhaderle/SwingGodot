@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://nm0w0yqxo1k3"]
+[gd_scene load_steps=24 format=3 uid="uid://nm0w0yqxo1k3"]
 
 [ext_resource type="Shader" path="res://Shaders/background.gdshader" id="1_2umnk"]
 [ext_resource type="Script" path="res://Scripts/UIController.gd" id="1_hhfyu"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://Scripts/LevelPolygon.gd" id="4_288rl"]
 [ext_resource type="Script" path="res://Scripts/RoomAreaController.gd" id="5_fn3gd"]
 [ext_resource type="Shape2D" uid="uid://62j6bwm8ceuu" path="res://169rect.tres" id="6_ruafo"]
+[ext_resource type="Script" path="res://Scripts/DisappearingPolygon.gd" id="7_jv8k4"]
 [ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="7_mrs78"]
 [ext_resource type="PackedScene" uid="uid://catbl3tltfboe" path="res://Scenes/npc.tscn" id="7_yruwv"]
 [ext_resource type="Texture2D" uid="uid://dk33chuwhm2ux" path="res://Art/pointlighttexture.tres" id="8_5dej1"]
@@ -137,12 +138,13 @@ z_index = 10
 position = Vector2(-1718, 335)
 color = Color(0.1537, 0.1537, 0.29, 1)
 polygon = PackedVector2Array(29, 166, -87, 143, -91, 19, 29, -25)
+script = ExtResource("7_jv8k4")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Level0/LevelGeometry/FalseWall"]
+[node name="Area2D" type="Area2D" parent="Level0/LevelGeometry/FalseWall"]
 collision_layer = 8
-input_pickable = true
+collision_mask = 18
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Level0/LevelGeometry/FalseWall/StaticBody2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Level0/LevelGeometry/FalseWall/Area2D"]
 visible = false
 position = Vector2(2.08165e-12, 2.08165e-12)
 polygon = PackedVector2Array(29, 166, -87, 143, -91, 19, 29, -25)
@@ -321,8 +323,8 @@ width = 2.0
 [node name="Grapple" type="CharacterBody2D" parent="PlayerController"]
 position = Vector2(269, -140)
 scale = Vector2(0.02, 0.02)
-collision_layer = 4
-collision_mask = 3
+collision_layer = 16
+collision_mask = 11
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerController/Grapple"]
 modulate = Color(0.909767, 0.5586, 0.98, 1)
@@ -368,7 +370,3 @@ texture_scale = 2.31
 
 [connection signal="clicked_on_grapple_area" from="CanvasLayer/ReticleController" to="PlayerController" method="_on_reticle_clicked_on_grapple_area"]
 [connection signal="clicked_release_from_grapple_area" from="CanvasLayer/ReticleController" to="PlayerController" method="_on_clicked_release_from_grapple_area"]
-[connection signal="mouse_entered" from="Level0/LevelGeometry/Border/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_entered_grapple_area"]
-[connection signal="mouse_exited" from="Level0/LevelGeometry/Border/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_exited_grapple_area"]
-[connection signal="mouse_entered" from="Level0/LevelGeometry/Rock1/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_entered_grapple_area"]
-[connection signal="mouse_exited" from="Level0/LevelGeometry/Rock1/StaticBody2D" to="CanvasLayer/ReticleController" method="_on_mouse_exited_grapple_area"]

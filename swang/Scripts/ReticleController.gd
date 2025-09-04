@@ -4,6 +4,7 @@ signal clicked_on_grapple_area(clickPosition : Vector2)
 signal clicked_release_from_grapple_area
 
 var overGrappleArea : bool
+var numAreasOver = 0
 var emittedGrapple : bool
 
 @export var highlightedColor : Color
@@ -16,7 +17,10 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	overGrappleArea = false
 	emittedGrapple = false
+	modulate = normalColor
 	process_physics_priority = -1
+	SignalBus.mouse_entered_grapple_area.connect(_on_mouse_entered_grapple_area)
+	SignalBus.mouse_exited_grapple_area.connect(_on_mouse_exited_grapple_area)
 
 func _physics_process(delta: float):
 	position = get_viewport().get_mouse_position()
@@ -42,9 +46,14 @@ func _physics_process(delta: float):
 func _on_mouse_entered_grapple_area():
 	#scale = Vector2(highlightedScale, highlightedScale)
 	modulate = highlightedColor
+	numAreasOver += 1
 	overGrappleArea = true
 
 func _on_mouse_exited_grapple_area():
-	scale = Vector2(normalScale, normalScale)
-	modulate = normalColor
-	overGrappleArea = false
+	numAreasOver -= 1
+	overGrappleArea = numAreasOver > 0
+	
+	if !overGrappleArea:
+		scale = Vector2(normalScale, normalScale)
+		modulate = normalColor
+		

@@ -80,7 +80,8 @@ Restart={
 2d_physics/layer_1="NormalGround"
 2d_physics/layer_2="Player"
 2d_physics/layer_3="NPCs"
-2d_physics/layer_4="F"
+2d_physics/layer_4="False Walls"
+2d_physics/layer_5="Grapple"
 
 [rendering]
 
