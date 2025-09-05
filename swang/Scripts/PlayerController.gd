@@ -36,6 +36,7 @@ signal grappled
 @export var stopVelocityThreshold : float = 10
 ## the maximum angle counted as a floor in radians 
 @export var maxFloorAngle : float = .8
+@export var grappleCurve : Curve
 ## whether or not we are currently grappled
 var isGrappled : bool
 ## whether or not the grapple is currently flying towards a target
@@ -48,10 +49,12 @@ var groundNormal : Vector2
 ## the target the grapple is flying towards. can be a Vector2 or Node2D
 var grappleTarget
 var grapplePoints : Array[Vector2]
+var lastPosition
 
 func _ready():
 	Utils.disableNode(grapple)
 	process_physics_priority = 10
+	lastPosition = playerBody.position
 
 func _physics_process(delta):
 	if isGrappleFlying:
@@ -69,7 +72,7 @@ func _physics_process(delta):
 		# move the grapple and record any collision
 		var collision : KinematicCollision2D = grapple.move_and_collide(grappleFlyingSpeed * direction * delta)
 		
-		# get rid of a point if we're near it
+		# get rid of a point if the grapple sprite near it
 		if grapplePoints.size() > 0 and (grapplePoints[-1] - grapple.position).length() < grappleFlyingSpeed * delta * .5:
 			grapplePoints.pop_back()
 		
@@ -124,13 +127,10 @@ func _physics_process(delta):
 		# right now this only checks to see if we should add a new point between the first swing point and the player.
 		# checking between every pair makes the list grow infinitely long
 		# we could probably fix that but there's no situation where it's relevant til we have movable platforms
-		for i in range(1):
-			var from = grapplePoints[i]
-			var to : Vector2
-			if i == 0:
-				to = playerBody.position
-			else:
-				to = grapplePoints[i - 1]
+		var iters = 10
+		for i in range(iters):
+			var from = grapplePoints[0]
+			var to = lerp(lastPosition, playerBody.position, (float)(i+1)/iters)
 			
 			#get an epsilon to cushion our raycast a bit
 			var epsilon = (to - from).normalized() * 7.5
@@ -141,6 +141,8 @@ func _physics_process(delta):
 			#if we hit something add a point
 			if result:
 				grapplePoints.push_front(result.collider.global_position)
+				break
+			
 		
 		# add the grapple gravity
 		playerBody.velocity += Vector2(0, grappleGravity) * delta
@@ -193,6 +195,8 @@ func _physics_process(delta):
 			playerBody.velocity += Vector2(0, gravity) * delta
 			addAirMovement(delta)
 	
+	
+	lastPosition = playerBody.position
 	var collision = playerBody.move_and_collide(playerBody.velocity)
 	# handle the bounce off walls and isGrounded-ness
 	if collision:
@@ -243,7 +247,25 @@ func _process(delta):
 		if isGrappleFlying:
 			linePoints.append(grapple.position)
 		
-				
+		# add curves to the line if the line length is below the minLineLength + a bit of slack
+		var slack = 100
+		var currentLineLength = getCurrentLineLength() 
+		if currentLineLength < minLineLength + slack:
+			var animatedLinePoints = []
+			var numPoints = 100
+			var perp = (linePoints[1] - linePoints[0]).rotated(.5 * PI)
+			# amount of offset from the "true" straight line is determined by how much slack we have
+			var d = 1 - (currentLineLength / (minLineLength + slack))
+			for i in range(numPoints):
+				var t = (float)(i) / numPoints
+				var p = lerp(linePoints[0], linePoints[1], t)
+				var p_a = p + grappleCurve.sample(t) * perp * d
+				animatedLinePoints.push_back(p_a)
+			# pop off the front (should be the player position)
+			linePoints.pop_front()
+			animatedLinePoints.append_array(linePoints)
+			linePoints = animatedLinePoints
+			
 		grappleLine.points = linePoints
 	else:
 		Utils.disableNode(grappleLine)
@@ -282,8 +304,11 @@ func _process(delta):
 	if abs(playerBody.velocity.x) > 0:
 		sprite.flip_h = playerBody.velocity.x < 0
 
-func getCurrentLineLength() -> int:
-	var len = (playerBody.position - grapplePoints[-1]).length()
+func getCurrentLineLength() -> float:
+	if grapplePoints.is_empty():
+		return (playerBody.position - grapple.position).length()
+		
+	var len = (playerBody.position - grapplePoints[0]).length()
 	
 	for i in range(grapplePoints.size() - 1):
 		len += (grapplePoints[i] - grapplePoints[i+1]).length()

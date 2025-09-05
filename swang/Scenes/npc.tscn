@@ -1,14 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://catbl3tltfboe"]
+[gd_scene load_steps=6 format=3 uid="uid://catbl3tltfboe"]
 
 [ext_resource type="Script" path="res://Scripts/NPCController.gd" id="1_dotbm"]
-[ext_resource type="Texture2D" uid="uid://cfv4r6byk3h0" path="res://Art/icon.svg" id="2_x888o"]
+[ext_resource type="Texture2D" uid="uid://du7tckbqlb8y5" path="res://Art/frog-sprite-01.png" id="2_12vhb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nmnmn"]
+atlas = ExtResource("2_12vhb")
+region = Rect2(85, 244, 828, 512)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i3c6s"]
 size = Vector2(300, 300)
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_86bpc"]
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_b7h4w"]
 cull_mode = 1
-polygon = PackedVector2Array(55.4, -64, -55.5, -64, -57.5, -63, -60.2, -63, -64, -55.4, -64, 56.3, -63, 57.6, -63, 60.1, -56.8, 64, 56.4, 64, 60.6, 61, 62.4, 61, 64, 56.2, 64, -56.4, 63, -57.7, 63, -60.2)
+polygon = PackedVector2Array(28, -256, -23.5, -256, -27.1, -255, -30.5, -255, -52.5, -242, -54.7, -242, -87.7, -214, -89.9, -214, -104.9, -197, -106.1, -197, -133, -156.6, -133, -154.9, -149, -140.9, -166, -135.5, -166, -134.8, -194.3, -131, -203.3, -131, -227.3, -124, -231.4, -124, -251.4, -115, -253.8, -115, -261.7, -108, -263.9, -108, -278.9, -92, -280.2, -92, -291.2, -71, -292.5, -71, -304, -32.3, -304, -29.7, -348.7, -43, -361.2, -43, -385.1, -37, -388.7, -37, -404.8, -24, -406.3, -24, -414, -6.89999, -414, 36.3, -405, 58.5, -405, 60.7, -390, 80.6, -390, 82.8, -374, 98.8, -374, 99.9, -309, 156.2, -347.1, 166, -350.7, 166, -368.7, 180, -370.7, 180, -372, 187.8, -372, 192, -367, 195.9, -367, 198, -351.7, 198, -358, 207, -360, 207, -360, 217, -355, 220.9, -355, 222.2, -351.5, 224, -343.6, 224, -325.1, 217.1, -329, 226.6, -329, 229.7, -320, 241, -310.5, 241, -280, 224.2, -280, 223.4, -214.6, 200, -211.4, 200, -204.4, 195, -202, 195, -193, 182.7, -193, 175.7, -163.3, 185, -160.5, 185, -109.4, 209, -107.7, 209, -93.7, 220, -91.9, 220, -69, 245.7, -69, 248, -64, 248, -64, 249.8, -58.7, 248, -55, 248, -51, 243, -49.4, 243, -47, 233.2, -47, 230.6, -33.6, 239, -22.1, 239, -17.1, 233, -15, 233, -15, 221.5, -18.8, 214, -4.20001, 214, 2.89999, 206.8, 14.2, 206, 15.1, 206, 9.60001, 220, 7.89999, 220, 9, 236.1, 9, 239.1, 19.4, 246, 26.7, 246, 41.5, 234, 42, 236.4, 42, 245.6, 49, 255.5, 66.6, 256, 92, 224.7, 92, 223.1, 106, 215.2, 106, 214.4, 169.1, 197, 173.5, 197, 203.7, 182.4, 283.8, 199, 289.9, 199, 338.7, 212, 347.7, 212, 355, 205.9, 355, 196.2, 351.3, 192.5, 352.6, 193, 362.8, 193, 367.8, 188, 370.2, 188, 369, 175.8, 369, 173, 361.2, 166.9, 369.4, 164, 372.1, 164, 375.1, 159, 377.4, 159, 376, 150.7, 376, 147.8, 369, 143.8, 369, 142.3, 349, 139.2, 349, 138.1, 299.3, 136.1, 339.7, 105, 341.8, 105, 379.8, 67, 381, 67, 404, 35, 405.4, 35, 414, 9.20001, 414, -34.2, 402, -48.7, 402, -50.4, 390, -54.5, 390, -55.7, 382.2, -57, 351.8, -57, 339, -54, 334.6, -54, 298.7, -39, 295.4, -39, 277.8, -27.1, 277, -50.1, 277, -54.4, 289, -71, 290.5, -71, 293.5, -82, 294.9, -82, 296, -115, 296, -123.3, 283, -161.4, 283, -164.5, 272, -185.6, 272, -187.7, 263, -198.7, 263, -200.9, 241, -220.9, 241, -222.3, 208, -237.3, 208, -238.5, 170.3, -249, 155.6, -249, 126.6, -236, 124.4, -236, 103.4, -222, 98.5, -222, 40, -252.3, 40, -253.6)
 
 [node name="NPC" type="Area2D"]
 position = Vector2(678, 749)
@@ -18,14 +22,19 @@ script = ExtResource("1_dotbm")
 dialogueLine = "Bro it is way too wet in this cave..."
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-self_modulate = Color(0, 1, 0.166667, 1)
-texture = ExtResource("2_x888o")
+modulate = Color(1, 0.43, 0.658, 1)
+position = Vector2(0, 39)
+scale = Vector2(0.14, 0.14)
+texture = SubResource("AtlasTexture_nmnmn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_i3c6s")
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
-occluder = SubResource("OccluderPolygon2D_86bpc")
+[node name="LightOccluder2D2" type="LightOccluder2D" parent="."]
+visible = false
+position = Vector2(0, 39)
+scale = Vector2(0.14, 0.14)
+occluder = SubResource("OccluderPolygon2D_b7h4w")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]
