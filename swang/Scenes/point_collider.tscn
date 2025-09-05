@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cfk0j7j2ymec1"]
+
+[ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="1_dk0hb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8lt6f"]
+radius = 2.0
+
+[node name="PointCollider" type="Area2D"]
+collision_layer = 64
+collision_mask = 0
+input_pickable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_8lt6f")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.0383301, 0.0383301)
+texture = ExtResource("1_dk0hb")

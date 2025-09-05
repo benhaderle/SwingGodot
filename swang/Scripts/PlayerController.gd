@@ -112,7 +112,7 @@ func _physics_process(delta):
 				to = grapplePoints[i - 1]
 			
 			#get an epsilon to cushion our raycast a bit
-			var epsilon = (to - from).normalized() * 20
+			var epsilon = (to - from).normalized() * 7.5
 			var query = PhysicsRayQueryParameters2D.create(to, from + epsilon, 1)
 			query.hit_from_inside = true
 			var result = space_state.intersect_ray(query)
@@ -133,13 +133,14 @@ func _physics_process(delta):
 				to = grapplePoints[i - 1]
 			
 			#get an epsilon to cushion our raycast a bit
-			var epsilon = (to - from).normalized() * 20
-			var query = PhysicsRayQueryParameters2D.create(to, from + epsilon, 1)
+			var epsilon = (to - from).normalized() * 7.5
+			var query = PhysicsRayQueryParameters2D.create(to - epsilon, from + epsilon, 64)
 			query.hit_from_inside = true
+			query.collide_with_areas = true
 			var result = space_state.intersect_ray(query)
 			#if we hit something add a point
 			if result:
-				grapplePoints.push_front(result.position)
+				grapplePoints.push_front(result.collider.global_position)
 		
 		# add the grapple gravity
 		playerBody.velocity += Vector2(0, grappleGravity) * delta

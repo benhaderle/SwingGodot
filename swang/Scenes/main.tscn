@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://nm0w0yqxo1k3"]
+[gd_scene load_steps=26 format=3 uid="uid://nm0w0yqxo1k3"]
 
 [ext_resource type="Shader" path="res://Shaders/background.gdshader" id="1_2umnk"]
 [ext_resource type="Script" path="res://Scripts/UIController.gd" id="1_hhfyu"]
@@ -11,11 +11,13 @@
 [ext_resource type="Script" path="res://Scripts/LevelPolygon.gd" id="4_288rl"]
 [ext_resource type="Script" path="res://Scripts/RoomAreaController.gd" id="5_fn3gd"]
 [ext_resource type="Shape2D" uid="uid://62j6bwm8ceuu" path="res://169rect.tres" id="6_ruafo"]
+[ext_resource type="PackedScene" uid="uid://cfk0j7j2ymec1" path="res://Scenes/point_collider.tscn" id="7_7fxqu"]
 [ext_resource type="Script" path="res://Scripts/DisappearingPolygon.gd" id="7_jv8k4"]
 [ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="7_mrs78"]
 [ext_resource type="PackedScene" uid="uid://catbl3tltfboe" path="res://Scenes/npc.tscn" id="7_yruwv"]
 [ext_resource type="Texture2D" uid="uid://dk33chuwhm2ux" path="res://Art/pointlighttexture.tres" id="8_5dej1"]
 [ext_resource type="SpriteFrames" uid="uid://bnwcsx30oc8bi" path="res://Art/frogSpriteFrames.tres" id="8_6lftg"]
+[ext_resource type="PackedScene" uid="uid://b5flxiyasa0uw" path="res://Scenes/fly.tscn" id="10_c0xpp"]
 
 [sub_resource type="Environment" id="Environment_susy2"]
 background_mode = 3
@@ -103,6 +105,7 @@ position = Vector2(16, -217)
 color = Color(0.1537, 0.1537, 0.29, 1)
 polygon = PackedVector2Array(-3153, 2819, 570, 2724, 1689, 2838, 2997, 2878, 4551, 2841, 6436, 2204, 5822, 1065, 4063, 1076, 3639, 1268, 3371, 1431, 3172, 1499, 3152, 1538, 3266, 1578, 3354, 1552, 3494, 1773, 3389, 1862, 3415, 2089, 3386, 2121, 2898, 2165, 2539, 1873, 2547, 1818, 2870, 1729, 3079, 1788, 3144, 1704, 3082, 1658, 2987, 1626, 2914, 1148, 2851, 1112, 2140, 1219, 1502, 1132, 1050, 1033, 241, 1031, -194, 1132, -841, 1162, -1065, 1174, -1339, 1255, -1502, 1238, -1577, 1118, -1484, 1049, -1350, 957, -1228, 896, -1180, 899, -1073, 1028, -854, 1052, -684, 936, -293, 894, -291, 857, -445, 803, -606, 760, -809, 693, -862.098, 692.617, -1010, 767, -1398, 737, -1614, 767, -1785, 645, -1779, 584, -1579, 490, -1202, 558, -831, 531, -702, 432, -593, 325, -578, 108, -295, 131, -84, 74, -82, 54, -655, -57, -713, -54, -1016, 7, -1173, 4, -1476, -207, -1462, -276, -1078, -533, -1011, -530, -537, -171, -465, -168, 233, -397, 618, -430, 1020, -450, 1425, -397, 1646, -384, 1674, -346, 1590, -167, 1502, -124, 1386, -127, 1111, -240, 1035, -240, 951, -187, 863, -64, 719, 12, 601, 26, 483, 91, 299, 186, -166, 417, -297, 413, -400, 431, -399, 455, -219, 515, 347, 557, 902, 241, 1596, 74, 2055, 262, 2426, -543, 3574, -671, 4542, -339, 5162, -431, 6450, -499, 5194, -1155, 2000, -1131, -1973, -1121, -3684, 784)
 script = ExtResource("4_288rl")
+cornerCollider = ExtResource("7_7fxqu")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Level0/LevelGeometry/Border"]
 input_pickable = true
@@ -121,6 +124,7 @@ color = Color(0.1537, 0.1537, 0.29, 1)
 antialiased = true
 polygon = PackedVector2Array(180, 41, 415, 17, 444, 85, 183, 246, -19, 289, -47, 265, -7, 145, -75, 62, -69, 42, 9, 20)
 script = ExtResource("4_288rl")
+cornerCollider = ExtResource("7_7fxqu")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Level0/LevelGeometry/Rock1"]
 input_pickable = true
@@ -148,8 +152,6 @@ collision_mask = 18
 visible = false
 position = Vector2(2.08165e-12, 2.08165e-12)
 polygon = PackedVector2Array(29, 166, -87, 143, -91, 19, 29, -25)
-
-[node name="Polygon2D" type="Polygon2D" parent="Level0/LevelGeometry"]
 
 [node name="NPCs" type="Node2D" parent="Level0"]
 
@@ -204,6 +206,10 @@ energy = 0.33
 shadow_enabled = true
 texture = ExtResource("8_5dej1")
 texture_scale = 18.4
+
+[node name="Collectibles" type="Node2D" parent="Level0"]
+
+[node name="Fly" parent="Level0/Collectibles" instance=ExtResource("10_c0xpp")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-1318, 854)

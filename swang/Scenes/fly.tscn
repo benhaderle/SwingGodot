@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5flxiyasa0uw"]
+
+[ext_resource type="Script" path="res://Scripts/fly.gd" id="1_xs8g6"]
+[ext_resource type="Texture2D" uid="uid://csbmychwfa3r1" path="res://Art/circle.png" id="2_wibuy"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ov0si"]
+radius = 33.0606
+
+[node name="Fly" type="Node2D"]
+script = ExtResource("1_xs8g6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.626215, 0.483155, 0.131909, 1)
+scale = Vector2(0.0156249, 0.048371)
+texture = ExtResource("2_wibuy")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+modulate = Color(0.57, 0.57, 0.57, 1)
+show_behind_parent = true
+rotation = -1.57117
+scale = Vector2(0.00733781, 0.048371)
+texture = ExtResource("2_wibuy")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 18
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
+shape = SubResource("CircleShape2D_ov0si")
+
+[connection signal="body_entered" from="Area2D" to="." method="on_body_entered"]
