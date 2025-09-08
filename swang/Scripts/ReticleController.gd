@@ -30,9 +30,8 @@ func _physics_process(delta: float):
 	
 	if Input.is_action_pressed("Grapple") and !emittedGrapple:
 		scale = Vector2(pressedDownScale, pressedDownScale)
-		if overGrappleArea:
-			emit_signal("clicked_on_grapple_area", get_viewport().get_camera_2d().get_global_mouse_position())
-			emittedGrapple = true
+		emit_signal("clicked_on_grapple_area", get_viewport().get_camera_2d().get_global_mouse_position())
+		emittedGrapple = true
 	elif !Input.is_action_pressed("Grapple") and emittedGrapple:
 		if overGrappleArea:
 			scale = Vector2(highlightedScale, highlightedScale)

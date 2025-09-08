@@ -19,7 +19,7 @@ func on_dialogue_entered(dialogueText, dialoguePosition):
 	dialogueLabel.show()
 	dialogueLabel.text = dialogueText
 	dialogueLabel.set_size(Vector2(maxDialogueLabelWidth, dialogueLabel.size.y) + padding)
-	#idk why setting size to be the content width + padding doesn't work, but adding 8 here seems to stabilize things
+	# idk why setting size to be the content width + padding doesn't work, but adding 8 here seems to stabilize things
 	dialogueLabel.set_size(Vector2(dialogueLabel.get_content_width()+ 8, dialogueLabel.get_content_height()) + padding)
 	
 	var viewport = get_viewport()

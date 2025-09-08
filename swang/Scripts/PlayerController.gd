@@ -28,8 +28,10 @@ signal grappled
 @export var shortenSpeed : float = 400
 ## the minimum line length
 @export var minLineLength : float = 200
+@export var lineSlackLength : float = 300
+@export var maxLineShootingLength : float = 400
 ## how fast the grapple extends or retracts from a grapple point
-@export var grappleFlyingSpeed : float = 1000
+@export var grappleFlyingAcceleration : float = 10000
 ## the bounciness of the player when hitting a wall
 @export var bounceFactor : float = .5
 ## the threshold of velocity squared at which the player will stop moving if isGrounded
@@ -41,6 +43,8 @@ signal grappled
 var isGrappled : bool
 ## whether or not the grapple is currently flying towards a target
 var isGrappleFlying : bool
+#whether we're supposed to be flying away from the player
+var isGrappleFlyingOut : bool
 ## how long the grapple line length is
 var lineLength : float
 ## whether or not we are stopped on the ground rn
@@ -50,6 +54,7 @@ var groundNormal : Vector2
 var grappleTarget
 var grapplePoints : Array[Vector2]
 var lastPosition
+var grappleFlyingSpeed : Vector2 = Vector2.ZERO
 
 func _ready():
 	Utils.disableNode(grapple)
@@ -60,20 +65,29 @@ func _physics_process(delta):
 	if isGrappleFlying:
 		# getting the direction to fly in is different depending on what target we were given
 		var direction : Vector2
-		# if the given target is a position vector
+		#if we have grapple points, the target should be the last point in the list (the one closest to the end)
 		if grapplePoints.size() > 0:
 			direction = (grapplePoints[-1] - grapple.position).normalized()
+		# if the given target is a position vector
 		elif grappleTarget is Vector2:
 			direction = (grappleTarget - grapple.position).normalized()
 		# if the given target is another node
 		elif grappleTarget is Node2D:
 			direction = (grappleTarget.position - grapple.position).normalized()
 		
+		if !isGrappleFlyingOut or getCurrentLineLength() < maxLineShootingLength * .5:
+			grappleFlyingSpeed += direction * grappleFlyingAcceleration * delta
+			
+			if !isGrappleFlyingOut:
+				grappleFlyingSpeed = direction * grappleFlyingSpeed.length()
+		else:
+			grappleFlyingSpeed -= direction * grappleFlyingAcceleration * delta
+		
 		# move the grapple and record any collision
-		var collision : KinematicCollision2D = grapple.move_and_collide(grappleFlyingSpeed * direction * delta)
+		var collision : KinematicCollision2D = grapple.move_and_collide(grappleFlyingSpeed * delta)
 		
 		# get rid of a point if the grapple sprite near it
-		if grapplePoints.size() > 0 and (grapplePoints[-1] - grapple.position).length() < grappleFlyingSpeed * delta * .5:
+		if grapplePoints.size() > 0 and (grapplePoints[-1] - grapple.position).length() < grappleFlyingSpeed.length() * delta * .5:
 			grapplePoints.pop_back()
 		
 		# if there was a collision, it's time to do some stuff
@@ -83,6 +97,7 @@ func _physics_process(delta):
 			if collider.get_collision_layer_value(2):
 				isGrappleFlying = false
 				grapple.position = collision.get_position()
+				grappleFlyingSpeed = Vector2.ZERO
 				Utils.disableNode(grapple)
 				sprite.stop()
 				grapplePoints.clear()
@@ -90,6 +105,7 @@ func _physics_process(delta):
 			elif collider.get_collision_layer_value(1) and Input.is_action_pressed("Grapple"):
 				isGrappleFlying = false
 				grapple.position = collision.get_position()
+				grappleFlyingSpeed = Vector2.ZERO
 				# set up everything to be free flying
 				isGrappled = true
 				lineLength = (playerBody.position - grapple.position).length()
@@ -98,6 +114,11 @@ func _physics_process(delta):
 		if isGrappleFlying:
 			# enable the collision shape after one frame of movement 
 			grapple.get_node("CollisionShape2D").disabled = false
+			
+			if getCurrentLineLength() > maxLineShootingLength:
+				grappleTarget = playerBody
+				isGrappleFlyingOut = false
+				grapple.collision_mask = 2
 	
 	# adding grapple movement if we're grappled	
 	if isGrappled:
@@ -250,12 +271,12 @@ func _process(delta):
 		# add curves to the line if the line length is below the minLineLength + a bit of slack
 		var slack = 100
 		var currentLineLength = getCurrentLineLength() 
-		if currentLineLength < minLineLength + slack:
+		if currentLineLength < lineSlackLength:
 			var animatedLinePoints = []
 			var numPoints = 100
 			var perp = (linePoints[1] - linePoints[0]).rotated(.5 * PI)
 			# amount of offset from the "true" straight line is determined by how much slack we have
-			var d = 1 - (currentLineLength / (minLineLength + slack))
+			var d = 1 - (currentLineLength / lineSlackLength)
 			for i in range(numPoints):
 				var t = (float)(i) / numPoints
 				var p = lerp(linePoints[0], linePoints[1], t)
@@ -317,10 +338,14 @@ func getCurrentLineLength() -> float:
 
 # if we're no longer holding the grapple input, move the grapple back to the player
 func _on_clicked_release_from_grapple_area():
+	if !isGrappled and !isGrappleFlying:
+		return
+	
 	sprite.play("grappleFlying")
 	
 	isGrappled = false
 	isGrappleFlying = true
+	isGrappleFlyingOut = false
 	Utils.enableNode(grapple)
 	grappleTarget = playerBody
 	grapplePoints.pop_back()
@@ -332,8 +357,10 @@ func _on_reticle_clicked_on_grapple_area(clickPosition):
 	sprite.play("grappleLaunch")
 	
 	isGrappleFlying = true
+	isGrappleFlyingOut = true
 	Utils.enableNode(grapple)
 	grapple.position = playerBody.position
+	grappleFlyingSpeed = Vector2.ZERO
 	grappleTarget = clickPosition
 	grapple.get_node("CollisionShape2D").disabled = true
 	grapple.collision_mask = 1
@@ -347,7 +374,6 @@ func on_grappled():
 	
 	if !isGrappled:
 		return
-	
 	
 	grappled.emit()
 	isGrounded = false

@@ -198,7 +198,7 @@ texture = ExtResource("8_5dej1")
 texture_scale = 50.0
 
 [node name="PointLight2D3" type="PointLight2D" parent="Level0/Lights"]
-position = Vector2(5121, 307)
+position = Vector2(5207, 292)
 energy = 0.33
 shadow_enabled = true
 texture = ExtResource("8_5dej1")
@@ -221,7 +221,6 @@ zoom = Vector2(3.4, 3.4)
 script = ExtResource("2_ok7kf")
 
 [node name="RoomAreaParent" type="Node2D" parent="."]
-visible = false
 
 [node name="RoomArea1" type="Area2D" parent="RoomAreaParent"]
 position = Vector2(-1355, 766)
@@ -249,8 +248,8 @@ collision_mask = 2
 script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea3"]
-position = Vector2(2774, -367)
-scale = Vector2(144.03, 144.03)
+position = Vector2(2867, -367)
+scale = Vector2(154.67, 154.67)
 shape = ExtResource("6_ruafo")
 
 [node name="RoomArea4" type="Area2D" parent="RoomAreaParent"]
@@ -259,7 +258,7 @@ collision_mask = 2
 script = ExtResource("5_fn3gd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomAreaParent/RoomArea4"]
-position = Vector2(3424, -1329.5)
+position = Vector2(3424, -1281)
 scale = Vector2(101.882, 101.882)
 shape = ExtResource("6_ruafo")
 
