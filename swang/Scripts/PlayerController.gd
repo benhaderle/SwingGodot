@@ -55,6 +55,7 @@ var grappleTarget
 var grapplePoints : Array[Vector2]
 var lastPosition
 var grappleFlyingSpeed : Vector2 = Vector2.ZERO
+var isGrappleInputSpent : bool = false
 
 func _ready():
 	Utils.disableNode(grapple)
@@ -96,6 +97,7 @@ func _physics_process(delta):
 			# layer 2 is the player layer
 			if collider.get_collision_layer_value(2):
 				isGrappleFlying = false
+				isGrappleInputSpent = false
 				grapple.position = collision.get_position()
 				grappleFlyingSpeed = Vector2.ZERO
 				Utils.disableNode(grapple)
@@ -354,10 +356,14 @@ func _on_clicked_release_from_grapple_area():
 
 # if we clicked on a grapple area, move the grapple towards the clicked point
 func _on_reticle_clicked_on_grapple_area(clickPosition):
+	if isGrappleInputSpent:
+		return
+	
 	sprite.play("grappleLaunch")
 	
 	isGrappleFlying = true
 	isGrappleFlyingOut = true
+	isGrappleInputSpent = true
 	Utils.enableNode(grapple)
 	grapple.position = playerBody.position
 	grappleFlyingSpeed = Vector2.ZERO
