@@ -8,7 +8,7 @@ atlas = ExtResource("2_12vhb")
 region = Rect2(85, 244, 828, 512)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i3c6s"]
-size = Vector2(300, 300)
+size = Vector2(200, 200)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_b7h4w"]
 cull_mode = 1
