@@ -403,7 +403,7 @@ texture = ExtResource("7_mrs78")
 shape = SubResource("CircleShape2D_fhpe3")
 
 [node name="PlayerBody" type="CharacterBody2D" parent="PlayerController"]
-position = Vector2(4722, 888)
+position = Vector2(-1354, 882)
 scale = Vector2(2, 2)
 collision_layer = 2
 collision_mask = 5
