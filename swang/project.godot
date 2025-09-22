@@ -27,6 +27,7 @@ window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/dpi/allow_hidpi=false
+window/vsync/vsync_mode=2
 
 [editor_plugins]
 

@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 @onready var dialogueLabel = $DialogueLabel
+@onready var fpsLabel = $FPSLabel
 
 @export var maxDialogueLabelWidth : float = 600
 
@@ -37,3 +38,6 @@ func on_dialogue_entered(dialogueText, dialoguePosition):
 func on_dialogue_exited():
 	dialogueLabel.hide()
 	pass
+
+func _process(delta: float) -> void:
+	fpsLabel.text = str(Engine.get_frames_per_second()) + " FPS"
